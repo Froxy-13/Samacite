@@ -10,6 +10,12 @@ class UserPermissionTest extends TestCase
 {
     use WithRolesAndPermissions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpRolesAndPermissions();
+    }
+
     /**
      * Test regular user can create reports
      */
@@ -61,23 +67,23 @@ class UserPermissionTest extends TestCase
     }
 
     /**
-     * Test regular user cannot update reports
+     * Test regular user can update reports
      */
-    public function test_user_cannot_update_reports()
+    public function test_user_can_update_reports()
     {
         $user = User::factory()->create()->assignRole('Utilisateur');
 
-        $this->assertFalse($user->hasPermissionTo('report.update'));
+        $this->assertTrue($user->hasPermissionTo('report.update'));
     }
 
     /**
-     * Test regular user cannot delete reports
+     * Test regular user can delete reports
      */
-    public function test_user_cannot_delete_reports()
+    public function test_user_can_delete_reports()
     {
         $user = User::factory()->create()->assignRole('Utilisateur');
 
-        $this->assertFalse($user->hasPermissionTo('report.delete'));
+        $this->assertTrue($user->hasPermissionTo('report.delete'));
     }
 
     /**

@@ -60,11 +60,13 @@ class RolesAndPermissionsSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $adminRole->syncPermissions(Permission::all());
 
-        // User role
+        // User role - can manage their own reports and view all categories
         $userRole = Role::firstOrCreate(['name' => 'Utilisateur']);
         $userRole->syncPermissions([
             'report.create',
             'report.view.own',
+            'report.update',
+            'report.delete',
             'report.comment',
             'file.upload',
         ]);

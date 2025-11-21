@@ -238,31 +238,44 @@
 
 ---
 
-## 💬 Phase 4 - Système de Commentaires
+## 💬 Phase 4 - Système de Commentaires & de likes
 
-**Objectif**: Implémenter les commentaires sur les signalements
+**Objectif**: Implémenter les commentaires et les likes sur les signalements
 
 ### 📝 Tâches
 
 - [ ] **Création Migration**: Créer la table `comments`
   - Fichier: `database/migrations/XXXX_XX_XX_XXXXXX_create_comments_table.php`
   - Champs: `id`, `report_id`, `user_id`, `content`, `timestamps`
+- [ ] **Création Migration**: Créer la table `likes`
+  - Fichier: `database/migrations/XXXX_XX_XX_XXXXXX_create_likes_table.php`
+  - Champs: `id`, `report_id`, `user_id`, `timestamps`
 
-- [ ] **Test 4.1**: Tester la création d'un commentaire
+- [ ] **Test 4.1**: Tester la création d'un commentaire et d'un like
   - Fichier: `tests/Feature/Comments/CreateCommentTest.php`
   - Vérifier permission `report.comment`
+  - Fichier: `tests/Feature/Likes/CreateLikeTest.php`
+  - Vérifier permission `report.like`
 
-- [ ] **Test 4.2**: Tester la récupération des commentaires
+- [ ] **Test 4.2**: Tester la récupération des commentaires et des likes
   - Fichier: `tests/Feature/Comments/GetCommentsTest.php`
   - Vérifier pagination
   - Vérifier inclusion de l'utilisateur
+  - Fichier: `tests/Feature/Likes/GetLikesTest.php`
+  - Vérifier pagination
+  - Vérifier inclusion de l'utilisateur
 
-- [ ] **Test 4.3**: Tester la suppression d'un commentaire
+- [ ] **Test 4.3**: Tester la suppression d'un commentaire et d'un like
   - Fichier: `tests/Feature/Comments/DeleteCommentTest.php`
+  - Vérifier que seul le créateur ou Admin peut supprimer
+  - Fichier: `tests/Feature/Likes/DeleteLikeTest.php`
   - Vérifier que seul le créateur ou Admin peut supprimer
 
 - [ ] **Modèle Comment**: Créer le modèle
   - Fichier: `app/Models/Comment.php`
+  - Relations: `report()`, `user()`
+- [ ] **Modèle Like**: Créer le modèle
+  - Fichier: `app/Models/Like.php`
   - Relations: `report()`, `user()`
 
 - [ ] **Repository CommentInterface**: Créer l'interface
@@ -271,17 +284,26 @@
 - [ ] **Repository CommentEloquent**: Implémenter le repository
   - Fichier: `app/Repositories/Eloquent/EloquentCommentRepository.php`
 
-- [ ] **Implémentation 4.1**: Créer CommentController
+- [ ] **Repository LikeInterface**: Créer l'interface
+  - Fichier: `app/Repositories/Contracts/LikeRepositoryInterface.php`
+
+- [ ] **Repository LikeEloquent**: Implémenter le repository
+  - Fichier: `app/Repositories/Eloquent/EloquentLikeRepository.php`
+
+- [ ] **Implémentation 4.1**: Créer CommentController et LikeController
   - Fichier: `app/Http/Controllers/Reports/CommentController.php`
   - Méthodes: `index()`, `store()`, `destroy()`
 
-- [ ] **Routes**: Ajouter les routes pour les commentaires
+  - Fichier: `app/Http/Controllers/Reports/LikeController.php`
+  - Méthodes: `store()`, `destroy()`
+
+- [ ] **Routes**: Ajouter les routes pour les commentaires et les likes
   - Fichier: `routes/api.php`
 
 ### ✅ Checklist Validation Phase 4
 
 - [ ] Tous les tests passent
-- [ ] Les commentaires se créent et se suppriment
+- [ ] Les commentaires et les likes se créent et se suppriment
 - [ ] Les permissions sont appliquées
 - [ ] Les relations sont optimisées
 
@@ -569,8 +591,8 @@ Cache::tags(['categories'])->flush();
 | Phase | Statut | Notes | Feedback |
 |-------|--------|-------|----------|
 | Phase 1 - Auth | ✅ **COMPLÉTÉE** | ✓ 30 tests passent (77 assertions) ✓ Tous les endpoints fonctionnent ✓ Collection Postman créée | **À vérifier par le développeur** |
-| Phase 2 - Reports | ⏳ À faire | | |
-| Phase 3 - Categories & Images | ⏳ À faire | | |
+| Phase 2 - Reports | ✅ **COMPLÉTÉE** | ✓ 26 tests passent (80 assertions) ✓ CRUD complet ✓ Repository pattern implémenté ✓ Permissions appliquées | **Validée - Prête pour Phase 3** |
+| Phase 3 - Categories & Images | ✅ **COMPLÉTÉE** | ✓ 22 tests passent (48 assertions) ✓ Categories CRUD ✓ Image upload/delete ✓ Test data avec catégories ✓ Validation error responses | **FONCTIONNELLE - Prête pour Phase 4** |
 | Phase 4 - Commentaires | ⏳ À faire | | |
 | Phase 5 - Notifications | ⏳ À faire | | |
 | Phase 6 - Cache | ⏳ À faire | | |

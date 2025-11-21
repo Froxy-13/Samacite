@@ -10,6 +10,12 @@ class RegisterTest extends TestCase
 {
     use WithRolesAndPermissions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpRolesAndPermissions();
+    }
+
     /**
      * Test successful user registration with email
      */

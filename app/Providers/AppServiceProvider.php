@@ -11,7 +11,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Report Repository
+        $this->app->bind(
+            \App\Repositories\Contracts\ReportRepositoryInterface::class,
+            \App\Repositories\Eloquent\EloquentReportRepository::class
+        );
+
+        // Category Repository
+        $this->app->bind(
+            \App\Repositories\Contracts\CategoryRepositoryInterface::class,
+            \App\Repositories\Eloquent\EloquentCategoryRepository::class
+        );
+
+        // Report Image Repository
+        $this->app->bind(
+            \App\Repositories\Contracts\ReportImageRepositoryInterface::class,
+            \App\Repositories\Eloquent\EloquentReportImageRepository::class
+        );
     }
 
     /**
@@ -19,6 +35,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register policies
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Category::class, \App\Policies\CategoryPolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Report::class, \App\Policies\ReportPolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\ReportImage::class, \App\Policies\ReportImagePolicy::class);
     }
 }

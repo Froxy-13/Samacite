@@ -44,7 +44,7 @@ class AuthController extends BaseController
             'prenom' => $user->prenom,
             'email' => $user->email,
             'telephone' => $user->telephone,
-        ], 'User registered successfully', 201);
+        ], 'Utilisateur enregistré avec succès', 201);
     }
 
     /**
@@ -55,13 +55,13 @@ class AuthController extends BaseController
         // Validate input - accept either email or phone
         $validated = $request->validate([
             'email' => 'nullable|email',
-            'phone' => 'nullable|string',
+            'telephone' => 'nullable|string',
             'password' => 'required|string',
         ]);
 
         // Ensure at least one identifier is provided
-        if (empty($validated['email']) && empty($validated['phone'])) {
-            return $this->error('Email or phone is required', 422);
+        if (empty($validated['email']) && empty($validated['telephone'])) {
+            return $this->error('Email ou téléphone requis', 422);
         }
 
         // Find user by email or phone
@@ -70,13 +70,13 @@ class AuthController extends BaseController
         if (!empty($validated['email'])) {
             $query->where('email', $validated['email']);
         } else {
-            $query->where('telephone', $validated['phone']);
+            $query->where('telephone', $validated['telephone']);
         }
         
         $user = $query->first();
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return $this->error('Invalid credentials', 401);
+            return $this->error('Identifiants invalides', 401);
         }
 
         // Generate token
@@ -91,7 +91,7 @@ class AuthController extends BaseController
                 'telephone' => $user->telephone,
             ],
             'token' => $token,
-        ], 'Logged in successfully');
+        ], 'Connecté avec succès');
     }
 
     /**
@@ -109,7 +109,7 @@ class AuthController extends BaseController
             'telephone' => $user->telephone,
             'roles' => $user->getRoleNames(),
             'permissions' => $user->getAllPermissions()->pluck('name'),
-        ]);
+        ], 'Utilisateur récupéré avec succès');
     }
 
     /**
@@ -119,6 +119,6 @@ class AuthController extends BaseController
     {
         $request->user()->currentAccessToken()->delete();
 
-        return $this->success(null, 'Logged out successfully');
+        return $this->success(null, 'Déconnecté avec succès');
     }
 }

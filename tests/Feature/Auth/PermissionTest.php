@@ -10,6 +10,12 @@ class PermissionTest extends TestCase
 {
     use WithRolesAndPermissions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpRolesAndPermissions();
+    }
+
     /**
      * Test admin can access dashboard
      */

@@ -10,6 +10,12 @@ class LoginTest extends TestCase
 {
     use WithRolesAndPermissions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpRolesAndPermissions();
+    }
+
     /**
      * Test login with email
      */
@@ -55,7 +61,7 @@ class LoginTest extends TestCase
         ]);
 
         $response = $this->postJson('/api/auth/login', [
-            'phone' => '+221701234567',
+            'telephone' => '+221701234567',
             'password' => 'Password123',
         ]);
 
@@ -90,7 +96,7 @@ class LoginTest extends TestCase
         $response->assertStatus(401)
             ->assertJson([
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Identifiants invalides',
             ]);
     }
 
@@ -107,7 +113,7 @@ class LoginTest extends TestCase
         $response->assertStatus(401)
             ->assertJson([
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Identifiants invalides',
             ]);
     }
 

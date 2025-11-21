@@ -18,23 +18,42 @@ class DatabaseSeeder extends Seeder
         // Create roles and permissions first
         $this->call(RolesAndPermissionsSeeder::class);
 
-        // Create test users
-        $admin = User::factory()->create([
-            'nom' => 'Admin',
-            'prenom' => 'Utilisateur',
-            'email' => 'admin@example.com',
-            'telephone' => '+221701111111',
-            'password' => bcrypt('password123'),
-        ]);
-        $admin->assignRole('Admin');
+        // Create categories
+        $this->call(CategorySeeder::class);
 
-        $user = User::factory()->create([
-            'nom' => 'Test',
-            'prenom' => 'Utilisateur',
-            'email' => 'user@example.com',
-            'telephone' => '+221702222222',
-            'password' => bcrypt('password123'),
-        ]);
-        $user->assignRole('Utilisateur');
+        // Create admin users
+        $admins = [
+            [
+                'nom' => 'Thiane',
+                'prenom' => 'Admin',
+                'email' => 'thiane@samacite.sn',
+                'telephone' => '+221701111111',
+            ],
+            [
+                'nom' => 'Noé',
+                'prenom' => 'Admin',
+                'email' => 'noe@samacite.sn',
+                'telephone' => '+221702222222',
+            ],
+            [
+                'nom' => 'Alpha',
+                'prenom' => 'Admin',
+                'email' => 'alpha@samacite.sn',
+                'telephone' => '+221703333333',
+            ],
+        ];
+
+        foreach ($admins as $adminData) {
+            $admin = User::firstOrCreate(
+                ['email' => $adminData['email']],
+                [
+                    'nom' => $adminData['nom'],
+                    'prenom' => $adminData['prenom'],
+                    'telephone' => $adminData['telephone'],
+                    'password' => bcrypt('password123'),
+                ]
+            );
+            $admin->assignRole('Admin');
+        }
     }
 }

@@ -10,12 +10,10 @@ trait WithRolesAndPermissions
     use RefreshDatabase;
 
     /**
-     * Seed the database before each test
+     * Set up roles and permissions for testing
      */
-    public function setUp(): void
+    public function setUpRolesAndPermissions(): void
     {
-        parent::setUp();
-
         // Seed roles and permissions
         $this->seed(RolesAndPermissionsSeeder::class);
     }
