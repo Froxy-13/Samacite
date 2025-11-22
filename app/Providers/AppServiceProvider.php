@@ -53,5 +53,25 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::policy(\App\Models\ReportImage::class, \App\Policies\ReportImagePolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Comment::class, \App\Policies\CommentPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Like::class, \App\Policies\LikePolicy::class);
+
+        // Register event listeners
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Events\ReportCreated::class,
+            \App\Listeners\SendReportNotification::class
+        );
+
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Events\StatusChanged::class,
+            \App\Listeners\SendStatusNotification::class
+        );
+
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Events\CommentCreated::class,
+            \App\Listeners\SendCommentNotification::class
+        );
+
+        // Register model observers for cache invalidation
+        \App\Models\Category::observe(\App\Observers\CategoryObserver::class);
+        \App\Models\Report::observe(\App\Observers\ReportObserver::class);
     }
 }

@@ -4,9 +4,17 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Report;
 use App\Repositories\Contracts\ReportRepositoryInterface;
+use App\Services\CacheService;
 
 class EloquentReportRepository implements ReportRepositoryInterface
 {
+    protected CacheService $cacheService;
+
+    public function __construct(CacheService $cacheService)
+    {
+        $this->cacheService = $cacheService;
+    }
+
     public function paginateWithFilters(int $perPage = 15, array $filters = [])
     {
         $query = Report::query();

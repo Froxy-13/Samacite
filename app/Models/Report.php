@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\ReportCreated;
+use App\Events\StatusChanged;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +30,10 @@ class Report extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $dispatchesEvents = [
+        'created' => ReportCreated::class,
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -52,4 +58,14 @@ class Report extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function updateStatus($newStatus)
+    {
+        $oldStatus = $this->status;
+        $this->status = $newStatus;
+        $this->save();
+        
+        event(new StatusChanged($this, $oldStatus, $newStatus));
+    }
 }
+

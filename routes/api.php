@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Categories\CategoryController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Reports\CommentController;
 use App\Http\Controllers\Reports\ImageController;
 use App\Http\Controllers\Reports\LikeController;
@@ -52,5 +53,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reports/{reportId}/likes', [LikeController::class, 'store'])->name('likes.store');
     Route::delete('/reports/{reportId}/likes', [LikeController::class, 'destroy'])->name('likes.destroy');
     Route::delete('/likes/{id}', [LikeController::class, 'destroyById'])->name('likes.destroyById');
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('/notifications', [NotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
 });
 

@@ -4,9 +4,17 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Services\CacheService;
 
 class EloquentCategoryRepository implements CategoryRepositoryInterface
 {
+    protected CacheService $cacheService;
+
+    public function __construct(CacheService $cacheService)
+    {
+        $this->cacheService = $cacheService;
+    }
+
     public function paginateWithFilters(int $perPage = 15, array $filters = []): object
     {
         $query = Category::query();

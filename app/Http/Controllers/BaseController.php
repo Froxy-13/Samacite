@@ -14,7 +14,7 @@ class BaseController extends LaravelController
     /**
      * Success response
      */
-    protected function success($data = null, $message = 'Success', $statusCode = 200)
+    protected function success($data = null, $message = 'Succès', $statusCode = 200)
     {
         return BaseResponse::success($data, $message, $statusCode);
     }
@@ -22,7 +22,7 @@ class BaseController extends LaravelController
     /**
      * Error response
      */
-    protected function error($message = 'Error', $statusCode = 400, $data = null)
+    protected function error($message = 'Erreur', $statusCode = 400, $data = null)
     {
         return BaseResponse::error($message, $statusCode, $data);
     }
@@ -30,7 +30,7 @@ class BaseController extends LaravelController
     /**
      * Validation error response
      */
-    protected function validationError($errors, $message = 'Validation failed')
+    protected function validationError($errors, $message = 'Erreur de validation')
     {
         return BaseResponse::validationError($errors, $message);
     }
@@ -38,7 +38,7 @@ class BaseController extends LaravelController
     /**
      * Unauthorized response
      */
-    protected function unauthorized($message = 'Unauthorized')
+    protected function unauthorized($message = 'Non autorisé')
     {
         return BaseResponse::unauthorized($message);
     }
@@ -46,7 +46,7 @@ class BaseController extends LaravelController
     /**
      * Forbidden response
      */
-    protected function forbidden($message = 'Forbidden')
+    protected function forbidden($message = 'Accès interdit')
     {
         return BaseResponse::forbidden($message);
     }
@@ -54,7 +54,7 @@ class BaseController extends LaravelController
     /**
      * Not found response
      */
-    protected function notFound($message = 'Not found')
+    protected function notFound($message = 'Non trouvé')
     {
         return BaseResponse::notFound($message);
     }

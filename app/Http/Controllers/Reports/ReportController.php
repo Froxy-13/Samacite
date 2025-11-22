@@ -6,15 +6,16 @@ use App\Http\Controllers\BaseController;
 use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Repositories\Eloquent\EloquentReportRepository;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
 
 class ReportController extends BaseController
 {
     protected EloquentReportRepository $reportRepository;
 
-    public function __construct()
+    public function __construct(CacheService $cacheService)
     {
-        $this->reportRepository = new EloquentReportRepository();
+        $this->reportRepository = new EloquentReportRepository($cacheService);
     }
 
     public function index(Request $request)
@@ -147,7 +148,7 @@ class ReportController extends BaseController
             'status' => 'required|in:En attente,En cours,Résolu',
         ]);
 
-        $report = $this->reportRepository->update($id, $validated);
+        $report->updateStatus($validated['status']);
         $report = $this->reportRepository->findWithRelations($id);
 
         return $this->success(

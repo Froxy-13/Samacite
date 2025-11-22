@@ -593,9 +593,9 @@ Cache::tags(['categories'])->flush();
 | Phase 1 - Auth | ✅ **COMPLÉTÉE** | ✓ 30 tests passent (77 assertions) ✓ Tous les endpoints fonctionnent ✓ Collection Postman créée | **À vérifier par le développeur** |
 | Phase 2 - Reports | ✅ **COMPLÉTÉE** | ✓ 26 tests passent (80 assertions) ✓ CRUD complet ✓ Repository pattern implémenté ✓ Permissions appliquées | **Validée - Prête pour Phase 3** |
 | Phase 3 - Categories & Images | ✅ **COMPLÉTÉE** | ✓ 22 tests passent (48 assertions) ✓ Categories CRUD ✓ Image upload/delete ✓ Test data avec catégories ✓ Validation error responses | **FONCTIONNELLE - Prête pour Phase 4** |
-| Phase 4 - Commentaires | ⏳ À faire | | |
-| Phase 5 - Notifications | ⏳ À faire | | |
-| Phase 6 - Cache | ⏳ À faire | | |
+| Phase 4 - Commentaires & Likes | ✅ **COMPLÉTÉE** | ✓ 32 tests passent (122 assertions) ✓ Comments CRUD ✓ Like/Unlike toggle ✓ Check endpoint ✓ Permissions appliquées | **FONCTIONNELLE - Prête pour Phase 5** |
+| Phase 5 - Notifications | ✅ **COMPLÉTÉE** | ✓ 12 tests passent (17 assertions) ✓ Event-driven architecture ✓ 3 Events + 3 Listeners ✓ 6 API endpoints ✓ Database notifications table ✓ Smart targeting (creator/admins/participants) ✓ Full CRUD with authorization ✓ **CORRECTIONS APPORTÉES: Créateur reçoit notification, pas d'attente de queue** | **FONCTIONNELLE - TESTÉE en Postman - Prête pour Phase 6** |
+| Phase 6 - Cache | ✅ **COMPLÉTÉE** | ✓ 21 tests passent (45 assertions) ✓ CacheService centralisé ✓ Model Observers pour invalidation ✓ Repository pattern avec injection ✓ Key-based caching (cache:categories, cache:reports, cache:stats) ✓ TTLs correctes (3600s categories/stats, 60s reports) ✓ ReportController corrigé | **FONCTIONNELLE - Prête pour Phase 7** |
 | Phase 7 - Jobs | ⏳ À faire | | |
 | Phase 8 - Statistiques | ⏳ À faire | | |
 

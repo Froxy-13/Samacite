@@ -26,7 +26,7 @@ class CommentController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $perPage = request('per_page', 15);
@@ -34,7 +34,7 @@ class CommentController extends BaseController
 
         return $this->success(
             CommentResource::collection($comments),
-            'Comments retrieved successfully'
+            'Commentaires récupérés avec succès'
         );
     }
 
@@ -45,7 +45,7 @@ class CommentController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $this->authorize('create', Comment::class);
@@ -62,7 +62,7 @@ class CommentController extends BaseController
 
         return $this->success(
             new CommentResource($comment),
-            'Comment created successfully',
+            'Commentaire créé avec succès',
             201
         );
     }
@@ -74,13 +74,13 @@ class CommentController extends BaseController
     {
         $comment = Comment::find($id);
         if (!$comment) {
-            return $this->notFound('Comment not found');
+            return $this->notFound('Commentaire non trouvé');
         }
 
         $this->authorize('delete', $comment);
 
         $this->commentRepository->delete($id);
 
-        return $this->success([], 'Comment deleted successfully');
+        return $this->success([], 'Commentaire supprimé avec succès');
     }
 }

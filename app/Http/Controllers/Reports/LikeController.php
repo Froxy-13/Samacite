@@ -24,7 +24,7 @@ class LikeController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $perPage = request('per_page', 15);
@@ -32,7 +32,7 @@ class LikeController extends BaseController
 
         return $this->success(
             LikeResource::collection($likes),
-            'Likes retrieved successfully'
+            'Likes récupérés avec succès'
         );
     }
 
@@ -43,7 +43,7 @@ class LikeController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $this->authorize('create', Like::class);
@@ -55,7 +55,7 @@ class LikeController extends BaseController
 
         if ($existingLike) {
             return $this->error(
-                'User has already liked this report',
+                'L\'utilisateur a déjà aimé ce signalement',
                 409
             );
         }
@@ -67,7 +67,7 @@ class LikeController extends BaseController
 
         return $this->success(
             new LikeResource($like),
-            'Report liked successfully',
+            'Signalement aimé avec succès',
             201
         );
     }
@@ -79,21 +79,21 @@ class LikeController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $userId = auth('sanctum')->user()->id;
         $like = $this->likeRepository->findByReportIdAndUserId($reportId, $userId);
 
         if (!$like) {
-            return $this->notFound('Like not found');
+            return $this->notFound('Like non trouvé');
         }
 
         $this->authorize('delete', $like);
 
         $this->likeRepository->delete($like->id);
 
-        return $this->success([], 'Report unliked successfully');
+        return $this->success([], 'Signalement non aimé avec succès');
     }
 
     /**
@@ -103,7 +103,7 @@ class LikeController extends BaseController
     {
         $report = Report::find($reportId);
         if (!$report) {
-            return $this->notFound('Report not found');
+            return $this->notFound('Signalement non trouvé');
         }
 
         $userId = auth('sanctum')->user()->id;
@@ -111,7 +111,7 @@ class LikeController extends BaseController
 
         return $this->success(
             ['liked' => $liked],
-            'Like status retrieved successfully'
+            'Statut du like récupéré avec succès'
         );
     }
 
@@ -122,13 +122,13 @@ class LikeController extends BaseController
     {
         $like = Like::find($id);
         if (!$like) {
-            return $this->notFound('Like not found');
+            return $this->notFound('Like non trouvé');
         }
 
         $this->authorize('delete', $like);
 
         $this->likeRepository->delete($like->id);
 
-        return $this->success([], 'Like deleted successfully');
+        return $this->success([], 'Like supprimé avec succès');
     }
 }
