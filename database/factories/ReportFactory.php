@@ -31,4 +31,24 @@ class ReportFactory extends Factory
             'status' => 'En attente',
         ];
     }
+
+    /**
+     * Allow overriding user_id
+     */
+    public function forUser(User $user): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $user->id,
+        ]);
+    }
+
+    /**
+     * Allow overriding category_id
+     */
+    public function forCategory(Category $category): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'category_id' => $category->id,
+        ]);
+    }
 }

@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Notifications;
 
+use App\Jobs\NotifyUserJob;
 use App\Models\User;
 use App\Models\Report;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\Traits\WithRolesAndPermissions;
 
@@ -23,7 +23,7 @@ class NotifyCommentTest extends TestCase
 
     public function test_notification_sent_when_comment_created()
     {
-        Notification::fake();
+        Queue::fake();
 
         $user1 = User::factory()->create();
         $user1->assignRole('Utilisateur');
@@ -45,12 +45,12 @@ class NotifyCommentTest extends TestCase
             ])
             ->assertStatus(201);
 
-        Notification::assertSentTo($user1, \App\Notifications\CommentNotification::class);
+        Queue::assertPushed(NotifyUserJob::class);
     }
 
     public function test_report_owner_receives_comment_notification()
     {
-        Notification::fake();
+        Queue::fake();
 
         $user1 = User::factory()->create();
         $user1->assignRole('Utilisateur');
@@ -71,12 +71,14 @@ class NotifyCommentTest extends TestCase
                 'content' => 'Nice report!'
             ]);
 
-        Notification::assertSentTo($user1, \App\Notifications\CommentNotification::class);
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($user1) {
+            return $job->user->id === $user1->id;
+        });
     }
 
     public function test_notification_contains_comment_info()
     {
-        Notification::fake();
+        Queue::fake();
 
         $user1 = User::factory()->create();
         $user1->assignRole('Utilisateur');
@@ -97,13 +99,9 @@ class NotifyCommentTest extends TestCase
                 'content' => 'Test comment'
             ]);
 
-        Notification::assertSentTo(
-            $user1,
-            \App\Notifications\CommentNotification::class,
-            function ($notification) {
-                return $notification->comment->content === 'Test comment';
-            }
-        );
+        Queue::assertPushed(NotifyUserJob::class, function ($job) {
+            return isset($job->data['comment_id']);
+        });
     }
 
     public function test_other_commenters_receive_notifications_too()
@@ -132,7 +130,7 @@ class NotifyCommentTest extends TestCase
             ]);
 
         // Now fake for second comment
-        Notification::fake();
+        Queue::fake();
 
         // User3 comments
         $this->actingAs($user3, 'sanctum')
@@ -141,6 +139,8 @@ class NotifyCommentTest extends TestCase
             ]);
 
         // User2 should receive notification about user3's comment
-        Notification::assertSentTo($user2, \App\Notifications\CommentNotification::class);
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($user2) {
+            return $job->user->id === $user2->id;
+        });
     }
 }

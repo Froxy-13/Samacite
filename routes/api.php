@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Categories\CategoryController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Reports\CommentController;
 use App\Http\Controllers\Reports\ImageController;
 use App\Http\Controllers\Reports\LikeController;
 use App\Http\Controllers\Reports\ReportController;
+use App\Http\Controllers\Stats\StatsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,5 +63,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::delete('/notifications', [NotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
+
+    // Statistics
+    Route::prefix('stats')->group(function () {
+        Route::get('/global', [StatsController::class, 'global'])->name('stats.global');
+        Route::get('/user', [StatsController::class, 'user'])->name('stats.user');
+        Route::get('/user/{userId}', [StatsController::class, 'user'])->name('stats.userById');
+        Route::get('/category/{categoryId}', [StatsController::class, 'category'])->name('stats.category');
+    });
+
+    // Dashboard
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    });
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\ReportImageResource;
+use App\Jobs\ProcessReportImages;
 use App\Models\Report;
 use App\Models\ReportImage;
 use App\Repositories\Contracts\ReportImageRepositoryInterface;
@@ -52,6 +53,9 @@ class ImageController extends BaseController
             'report_id' => $reportId,
             'image_path' => $path,
         ]);
+
+        // Dispatch job to process the image (compression, resizing, etc.)
+        ProcessReportImages::dispatch($report);
 
         return $this->success(
             new ReportImageResource($image),

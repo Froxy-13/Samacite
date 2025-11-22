@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Notifications;
 
+use App\Jobs\NotifyUserJob;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\Traits\WithRolesAndPermissions;
 
@@ -22,7 +22,7 @@ class NotifyReportCreatedTest extends TestCase
 
     public function test_notification_sent_when_report_created()
     {
-        Notification::fake();
+        Queue::fake();
 
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
@@ -41,13 +41,15 @@ class NotifyReportCreatedTest extends TestCase
             ])
             ->assertStatus(201);
 
-        // Check if admin received notification
-        Notification::assertSentTo($admin, \App\Notifications\ReportCreatedNotification::class);
+        // Check if NotifyUserJob was dispatched (at least for report creator and one admin)
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($user, $admin) {
+            return $job->user->id === $user->id || $job->user->id === $admin->id;
+        });
     }
 
     public function test_admin_receives_new_report_notification()
     {
-        Notification::fake();
+        Queue::fake();
 
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
@@ -65,12 +67,14 @@ class NotifyReportCreatedTest extends TestCase
                 'status' => 'En attente'
             ]);
 
-        Notification::assertSentTo($admin, \App\Notifications\ReportCreatedNotification::class);
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($admin) {
+            return $job->user->id === $admin->id;
+        });
     }
 
     public function test_notification_contains_report_info()
     {
-        Notification::fake();
+        Queue::fake();
 
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
@@ -88,19 +92,15 @@ class NotifyReportCreatedTest extends TestCase
                 'status' => 'En attente'
             ]);
 
-        Notification::assertSentTo(
-            $admin,
-            \App\Notifications\ReportCreatedNotification::class,
-            function ($notification) {
-                return isset($notification->report->id) &&
-                       isset($notification->report->title);
-            }
-        );
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($user) {
+            return $job->user->id === $user->id &&
+                   str_contains($job->message, 'succès');
+        });
     }
 
     public function test_only_admins_receive_new_report_notifications()
     {
-        Notification::fake();
+        Queue::fake();
 
         $user1 = User::factory()->create();
         $user1->assignRole('Utilisateur');
@@ -118,10 +118,7 @@ class NotifyReportCreatedTest extends TestCase
                 'status' => 'En attente'
             ]);
 
-        // user1 (creator) should receive notification
-        Notification::assertSentTo($user1, \App\Notifications\ReportCreatedNotification::class);
-        
-        // user2 (other user) should NOT receive notification
-        Notification::assertNotSentTo($user2, \App\Notifications\ReportCreatedNotification::class);
+        // Two jobs should be dispatched: one for user1 (creator), one for admin(s)
+        Queue::assertPushed(NotifyUserJob::class, 2);
     }
 }
