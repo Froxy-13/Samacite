@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Categories\CategoryController;
+use App\Http\Controllers\Reports\CommentController;
 use App\Http\Controllers\Reports\ImageController;
+use App\Http\Controllers\Reports\LikeController;
 use App\Http\Controllers\Reports\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,5 +40,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reports/{reportId}/images', [ImageController::class, 'store'])->name('images.store');
     Route::delete('/images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::get('/reports/{reportId}/images', [ImageController::class, 'getByReport'])->name('images.getByReport');
+
+    // Comments
+    Route::get('/reports/{reportId}/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::post('/reports/{reportId}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Likes
+    Route::get('/reports/{reportId}/likes/check', [LikeController::class, 'check'])->name('likes.check');
+    Route::get('/reports/{reportId}/likes', [LikeController::class, 'index'])->name('likes.index');
+    Route::post('/reports/{reportId}/likes', [LikeController::class, 'store'])->name('likes.store');
+    Route::delete('/reports/{reportId}/likes', [LikeController::class, 'destroy'])->name('likes.destroy');
+    Route::delete('/likes/{id}', [LikeController::class, 'destroyById'])->name('likes.destroyById');
 });
 

@@ -28,6 +28,18 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\ReportImageRepositoryInterface::class,
             \App\Repositories\Eloquent\EloquentReportImageRepository::class
         );
+
+        // Comment Repository
+        $this->app->bind(
+            \App\Repositories\Contracts\CommentRepositoryInterface::class,
+            \App\Repositories\Eloquent\EloquentCommentRepository::class
+        );
+
+        // Like Repository
+        $this->app->bind(
+            \App\Repositories\Contracts\LikeRepositoryInterface::class,
+            \App\Repositories\Eloquent\EloquentLikeRepository::class
+        );
     }
 
     /**
@@ -39,5 +51,7 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Category::class, \App\Policies\CategoryPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Report::class, \App\Policies\ReportPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\ReportImage::class, \App\Policies\ReportImagePolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Comment::class, \App\Policies\CommentPolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Like::class, \App\Policies\LikePolicy::class);
     }
 }

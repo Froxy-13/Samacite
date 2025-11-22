@@ -37,6 +37,9 @@ class RolesAndPermissionsSeeder extends Seeder
             // Comments
             'report.comment',
 
+            // Likes
+            'report.like',
+
             // Notifications
             'notification.send',
 
@@ -68,6 +71,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'report.update',
             'report.delete',
             'report.comment',
+            'report.like',
             'file.upload',
         ]);
     }
