@@ -38,7 +38,6 @@ SamaCité est divisée en 3 modules:
 
 ### 🎯 Documentation Principale
 - 📖 [**BACKEND_ROADMAP.md**](.github/BACKEND_ROADMAP.md) - Roadmap complète avec tous les endpoints
-- 📮 [**POSTMAN_GUIDE.md**](.github/POSTMAN_GUIDE.md) - Guide d'utilisation Postman
 - 📋 [**spec.instructions.md**](.github/instructions/spec.instructions.md) - Spécifications techniques
 
 ### API Collection
