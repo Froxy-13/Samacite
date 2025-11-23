@@ -66,10 +66,10 @@ class ReportController extends BaseController
             return $this->forbidden('Vous n\'avez pas la permission de créer des signalements');
         }
 
-        // Validate
+        // Validate - description is now optional
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
@@ -98,10 +98,10 @@ class ReportController extends BaseController
         // Check authorization using policy
         $this->authorize('update', $report);
 
-        // Validate
+        // Validate - description is optional
         $validated = $request->validate([
             'title' => 'sometimes|string|max:255',
-            'description' => 'sometimes|string',
+            'description' => 'sometimes|nullable|string',
             'category_id' => 'sometimes|nullable|exists:categories,id',
             'latitude' => 'sometimes|nullable|numeric|between:-90,90',
             'longitude' => 'sometimes|nullable|numeric|between:-180,180',

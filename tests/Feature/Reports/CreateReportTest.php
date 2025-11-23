@@ -88,11 +88,10 @@ class CreateReportTest extends TestCase
     {
         $response = $this->actingAs($this->user)->postJson('/api/reports', [
             'title' => '',
-            'description' => '',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['title', 'description']);
+            ->assertJsonValidationErrors(['title']);
     }
 
     public function test_report_title_must_not_exceed_255_characters()
