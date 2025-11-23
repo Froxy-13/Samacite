@@ -1411,6 +1411,19 @@
                 },
                 {
                     "name": "Connexion Admin - Noe",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set('admin_token', jsonData.data.token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1444,6 +1457,19 @@
                 },
                 {
                     "name": "Connexion Admin - Alpha",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set('admin_token', jsonData.data.token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1473,6 +1499,163 @@
                                 "login"
                             ]
                         }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "STATISTIQUES & DASHBOARD (Phase 8)",
+            "description": "⚠️ IMPORTANT: Avant de tester les endpoints:\n\n1️⃣ Connectez-vous d'abord avec un utilisateur normal (ex: Connexion avec Email)\n   - Cela populera la variable {{auth_token}}\n\n2️⃣ Pour les endpoints Admin (Dashboard Admin, Stats d'un Utilisateur):\n   - Faites une connexion Admin d'abord (ex: Connexion Admin - Thiane, Noe ou Alpha)\n   - Cela populera la variable {{admin_token}}\n\n3️⃣ Testez ensuite les endpoints\n\nNote: Les tokens ont une durée de vie limitée, vous devrez reconnecter si les erreurs 401 persistent.",
+            "item": [
+                {
+                    "name": "Statistiques Globales",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/api/stats/global",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "api",
+                                "stats",
+                                "global"
+                            ]
+                        },
+                        "description": "Récupère les statistiques globales de la plateforme\n- Total de signalements\n- Distribution par statut avec percentages\n- Distribution par catégorie\n- Total d'utilisateurs\n- Distribution par rôles\n- Moyenne de signalements par utilisateur"
+                    }
+                },
+                {
+                    "name": "Statistiques Utilisateur Courant",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/api/stats/user",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "api",
+                                "stats",
+                                "user"
+                            ]
+                        },
+                        "description": "Récupère les statistiques de l'utilisateur actuellement connecté\n- Nombre total de signalements\n- Distribution par statut\n- Distribution par catégorie\n- Nombre de commentaires\n- Nombre de likes donnés\n- Nombre de likes reçus"
+                    }
+                },
+                {
+                    "name": "Statistiques d'un Utilisateur (Admin)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/api/stats/user/{{user_id}}",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "api",
+                                "stats",
+                                "user",
+                                "{{user_id}}"
+                            ]
+                        },
+                        "description": "Récupère les statistiques d'un utilisateur spécifique (Admin uniquement)\n- Nécessite permission: dashboard.access\n- User ID à passer en paramètre"
+                    }
+                },
+                {
+                    "name": "Statistiques Catégorie",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/api/stats/category/{{category_id}}",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "api",
+                                "stats",
+                                "category",
+                                "{{category_id}}"
+                            ]
+                        },
+                        "description": "Récupère les statistiques d'une catégorie\n- Total de signalements\n- Distribution par statut\n- Nombre d'utilisateurs ayant signalé\n- Moyenne de signalements par utilisateur"
+                    }
+                },
+                {
+                    "name": "Dashboard Admin",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/api/dashboard",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard"
+                            ]
+                        },
+                        "description": "Récupère les données complètes du dashboard admin\n- Statistiques globales (stats)\n- 5 derniers signalements (recent_reports)\n- Top 5 catégories les plus signalées (top_categories)\n- Nécessite permission: dashboard.access (Admin uniquement)"
                     }
                 }
             ]
