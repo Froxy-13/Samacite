@@ -130,7 +130,7 @@ class StatsController extends BaseController
         $startDate = now()->subDays($days)->startOfDay();
 
         // Récupérer les signalements groupés par date
-        $timeline = \App\Models\Report::query()
+        $reportsData = \App\Models\Report::query()
             ->where('created_at', '>=', $startDate)
             ->select(
                 \Illuminate\Support\Facades\DB::raw('DATE(created_at) as date'),
@@ -142,15 +142,42 @@ class StatsController extends BaseController
             ->groupBy(\Illuminate\Support\Facades\DB::raw('DATE(created_at)'))
             ->orderBy('date', 'asc')
             ->get()
-            ->map(fn($item) => [
-                'date' => $item->date,
-                'total' => (int) $item->count,
-                'by_status' => [
-                    'pending' => (int) ($item->pending ?? 0),
-                    'in_progress' => (int) ($item->in_progress ?? 0),
-                    'resolved' => (int) ($item->resolved ?? 0),
-                ]
-            ]);
+            ->keyBy('date');
+
+        // Générer tous les jours de la période, même ceux sans signalements
+        $timeline = [];
+        $currentDate = $startDate->copy();
+        $endDate = now()->endOfDay();
+
+        while ($currentDate <= $endDate) {
+            $dateStr = $currentDate->format('Y-m-d');
+            
+            if (isset($reportsData[$dateStr])) {
+                $data = $reportsData[$dateStr];
+                $timeline[] = [
+                    'date' => $dateStr,
+                    'total' => (int) $data->count,
+                    'by_status' => [
+                        'pending' => (int) ($data->pending ?? 0),
+                        'in_progress' => (int) ($data->in_progress ?? 0),
+                        'resolved' => (int) ($data->resolved ?? 0),
+                    ]
+                ];
+            } else {
+                // Ajouter un jour avec 0 signalements
+                $timeline[] = [
+                    'date' => $dateStr,
+                    'total' => 0,
+                    'by_status' => [
+                        'pending' => 0,
+                        'in_progress' => 0,
+                        'resolved' => 0,
+                    ]
+                ];
+            }
+            
+            $currentDate->addDay();
+        }
 
         return $this->success(
             [

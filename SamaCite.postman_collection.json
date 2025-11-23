@@ -1692,7 +1692,7 @@
                                 }
                             ]
                         },
-                        "description": "Récupère la timeline de croissance des signalements\n\nParamètres disponibles:\n- period=7days (défaut) - 7 derniers jours\n- period=30days - 30 derniers jours\n- period=90days - 90 derniers jours\n- period=365days - 365 derniers jours\n\nRetourne:\n- date: Date du jour (YYYY-MM-DD)\n- total: Nombre total de signalements du jour\n- by_status: Distribution par statut (pending, in_progress, resolved)\n\nParfait pour créer des graphiques de croissance!"
+                        "description": "Récupère la timeline de croissance des signalements - TOUS LES JOURS (même ceux à 0)\n\n📊 AMÉLIORATIONS:\n✅ Retourne maintenant tous les jours de la période, même sans signalements\n✅ Parfait pour créer des graphiques continus\n✅ Distribution complète par statut (pending, in_progress, resolved)\n\nParamètres disponibles:\n- period=7days (défaut) - 7 derniers jours\n- period=30days - 30 derniers jours\n- period=90days - 90 derniers jours\n- period=365days - 365 derniers jours\n\nRetourne:\n- date: Date du jour (YYYY-MM-DD)\n- total: Nombre total de signalements du jour\n- by_status: Distribution par statut (pending, in_progress, resolved)\n\n💡 Exemple: period=7days retourne les 7 derniers jours + aujourd'hui = 8 jours minimum\n\nParfait pour créer des graphiques LineChart ou BarChart dans React!"
                     }
                 }
             ]

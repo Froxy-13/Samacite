@@ -16,7 +16,7 @@
 | Phase 6 - Cache & Performance | ✅ **COMPLÉTÉE** | 21/21 ✓ | 45 assertions |
 | Phase 7 - Jobs Asynchrones | ✅ **COMPLÉTÉE** | 25/25 ✓ | 36 assertions |
 | Phase 8 - Statistiques & Analytics | ✅ **COMPLÉTÉE** | 35/35 ✓ | 111 assertions |
-| **TOTAL** | **✅ COMPLÉTÉE** | **205/205 ✓** | **536 assertions** |
+| **TOTAL** | **✅ COMPLÉTÉE** | **205/205 ✓** | **561 assertions** |
 
 ---
 
@@ -248,9 +248,16 @@ GET    /api/stats/global            - Stats globales (Admin)
 GET    /api/stats/user              - Stats utilisateur courant
 GET    /api/stats/user/{userId}     - Stats d'un user (Admin)
 GET    /api/stats/category/{id}     - Stats par catégorie
-GET    /api/stats/timeline          - Timeline de croissance des signalements
+GET    /api/stats/timeline          - Timeline de croissance (7,30,90,365 jours)
 GET    /api/dashboard               - Dashboard complet (Admin)
 ```
+
+### Timeline Features
+- ✅ Retourne tous les jours de la période (même ceux à 0 signalements)
+- ✅ Distribution complète par statut (pending, in_progress, resolved)
+- ✅ Parfait pour créer des graphiques continus (LineChart, BarChart)
+- ✅ Paramètres: 7days (défaut), 30days, 90days, 365days
+- ✅ Exemple: 7days retourne 8 entrées (7j + aujourd'hui)
 
 ### Données Disponibles
 - Nombre total de signalements & utilisateurs
@@ -258,7 +265,7 @@ GET    /api/dashboard               - Dashboard complet (Admin)
 - Distribution par catégorie
 - Moyenne de signalements par utilisateur
 - Distribution par rôles
-- **Timeline de croissance** (jour par jour avec distribution par statut)
+- **Timeline complète de croissance jour par jour** (avec tous les jours)
 
 ### Tests
 - 35 tests passants (111 assertions)

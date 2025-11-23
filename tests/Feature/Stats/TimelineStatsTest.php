@@ -75,14 +75,13 @@ class TimelineStatsTest extends TestCase
         $this->assertEquals(30, $data['days']);
     }
 
-    public function test_timeline_returns_report_count_by_date(): void
+    public function test_timeline_returns_all_7_days(): void
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
 
-        // Créer des reports à des dates spécifiques
-        Report::factory(5)->create(['created_at' => now()->setHour(10)]);
-        Report::factory(3)->create(['created_at' => now()->subDays(1)->setHour(10)]);
+        // Créer des reports seulement le premier jour
+        Report::factory(5)->create(['created_at' => now()->startOfDay()]);
 
         $response = $this->actingAs($user, 'sanctum')
             ->getJson('/api/stats/timeline?period=7days');
@@ -90,15 +89,20 @@ class TimelineStatsTest extends TestCase
         $response->assertStatus(200);
         $timeline = $response->json('data.timeline');
         
-        $this->assertGreaterThan(0, count($timeline));
+        // Vérifier que nous avons exactement 8 jours (aujourd'hui + 7 jours précédents)
+        $this->assertCount(8, $timeline);
         
-        // Vérifier la structure de chaque item
+        // Vérifier que chaque jour a les clés requises
         foreach ($timeline as $item) {
             $this->assertArrayHasKey('date', $item);
             $this->assertArrayHasKey('total', $item);
             $this->assertArrayHasKey('by_status', $item);
             $this->assertIsInt($item['total']);
         }
+        
+        // Vérifier qu'il y a au moins un jour avec 0 signalements (les jours sans reports)
+        $daysWithZero = array_filter($timeline, fn($item) => $item['total'] === 0);
+        $this->assertGreaterThan(0, count($daysWithZero));
     }
 
     public function test_timeline_requires_admin_permission(): void
