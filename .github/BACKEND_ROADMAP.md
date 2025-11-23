@@ -15,8 +15,8 @@
 | Phase 5 - Notifications & Broadcasting | ✅ **COMPLÉTÉE** | 12/12 ✓ | 17 assertions |
 | Phase 6 - Cache & Performance | ✅ **COMPLÉTÉE** | 21/21 ✓ | 45 assertions |
 | Phase 7 - Jobs Asynchrones | ✅ **COMPLÉTÉE** | 25/25 ✓ | 36 assertions |
-| Phase 8 - Statistiques & Analytics | ✅ **COMPLÉTÉE** | 28/28 ✓ | 81 assertions |
-| **TOTAL** | **✅ COMPLÉTÉE** | **198/198 ✓** | **506 assertions** |
+| Phase 8 - Statistiques & Analytics | ✅ **COMPLÉTÉE** | 35/35 ✓ | 111 assertions |
+| **TOTAL** | **✅ COMPLÉTÉE** | **205/205 ✓** | **536 assertions** |
 
 ---
 
@@ -248,6 +248,7 @@ GET    /api/stats/global            - Stats globales (Admin)
 GET    /api/stats/user              - Stats utilisateur courant
 GET    /api/stats/user/{userId}     - Stats d'un user (Admin)
 GET    /api/stats/category/{id}     - Stats par catégorie
+GET    /api/stats/timeline          - Timeline de croissance des signalements
 GET    /api/dashboard               - Dashboard complet (Admin)
 ```
 
@@ -257,10 +258,11 @@ GET    /api/dashboard               - Dashboard complet (Admin)
 - Distribution par catégorie
 - Moyenne de signalements par utilisateur
 - Distribution par rôles
+- **Timeline de croissance** (jour par jour avec distribution par statut)
 
 ### Tests
-- 28 tests passants (81 assertions)
-- Coverage: Stats calculation, Caching, Authorization
+- 35 tests passants (111 assertions)
+- Coverage: Stats calculation, Caching, Authorization, Timeline graphs
 
 ---
 

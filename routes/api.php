@@ -70,6 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', [StatsController::class, 'user'])->name('stats.user');
         Route::get('/user/{userId}', [StatsController::class, 'user'])->name('stats.userById');
         Route::get('/category/{categoryId}', [StatsController::class, 'category'])->name('stats.category');
+        Route::get('/timeline', [StatsController::class, 'timeline'])->name('stats.timeline');
     });
 
     // Dashboard

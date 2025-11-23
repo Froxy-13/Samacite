@@ -99,4 +99,68 @@ class StatsController extends BaseController
             'Statistiques de la catégorie récupérées avec succès'
         );
     }
+
+    /**
+     * Obtenir la timeline des signalements
+     * 
+     * @authenticated
+     * @permission stats.view
+     */
+    public function timeline(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user || !$user->can('stats.view')) {
+            return $this->forbidden('Vous n\'avez pas la permission d\'accéder aux statistiques');
+        }
+
+        // Paramètre de période (par défaut 7 jours)
+        $period = $request->query('period', '7days');
+        
+        // Convertir la période en nombre de jours
+        $days = match($period) {
+            '7days' => 7,
+            '30days' => 30,
+            '90days' => 90,
+            '365days' => 365,
+            default => 7
+        };
+
+        // Date de début
+        $startDate = now()->subDays($days)->startOfDay();
+
+        // Récupérer les signalements groupés par date
+        $timeline = \App\Models\Report::query()
+            ->where('created_at', '>=', $startDate)
+            ->select(
+                \Illuminate\Support\Facades\DB::raw('DATE(created_at) as date'),
+                \Illuminate\Support\Facades\DB::raw('COUNT(*) as count'),
+                \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN status = "En attente" THEN 1 ELSE 0 END) as pending'),
+                \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN status = "En cours" THEN 1 ELSE 0 END) as in_progress'),
+                \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN status = "Résolu" THEN 1 ELSE 0 END) as resolved')
+            )
+            ->groupBy(\Illuminate\Support\Facades\DB::raw('DATE(created_at)'))
+            ->orderBy('date', 'asc')
+            ->get()
+            ->map(fn($item) => [
+                'date' => $item->date,
+                'total' => (int) $item->count,
+                'by_status' => [
+                    'pending' => (int) ($item->pending ?? 0),
+                    'in_progress' => (int) ($item->in_progress ?? 0),
+                    'resolved' => (int) ($item->resolved ?? 0),
+                ]
+            ]);
+
+        return $this->success(
+            [
+                'period' => $period,
+                'days' => $days,
+                'start_date' => $startDate->format('Y-m-d'),
+                'end_date' => now()->format('Y-m-d'),
+                'timeline' => $timeline
+            ],
+            'Timeline des signalements récupérée avec succès'
+        );
+    }
 }
