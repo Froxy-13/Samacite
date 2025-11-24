@@ -1,0 +1,22 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UpdateProfileAdminTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmin can update user profile[39m[90m                                                    [39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only nom[39m[90m                                                        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only prenom[39m[90m                                                     [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only telephone[39m[90m                                                  [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can add email[39m[90m                                                              [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update email[39m[90m                                                           [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update user password[39m[90m                                                   [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin password requires confirmation[39m[90m                                             [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid email format admin[39m[90m                                                       [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate email validation admin[39m[90m                                                 [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid telephone format admin[39m[90m                                                   [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot update profile[39m[90m                                       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot update profile[39m[90m                                    [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can null out telephone[39m[90m                                                     [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can null out email[39m[90m                                                         [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update all fields at once[39m[90m                                              [39m [90m0.18s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (47 assertions)[39m
+  [90mDuration:[39m [39m3.86s[39m
+
