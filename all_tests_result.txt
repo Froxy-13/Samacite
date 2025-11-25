@@ -1,0 +1,314 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ExampleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthat true is true[39m[90m                                                                [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\LoginTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can login with email[39m[90m                                                        [39m [90m1.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can login with telephone[39m[90m                                                    [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogin fails with invalid credentials[39m[90m                                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlogin fails with non existent user[39m[90m                                               [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtoken is valid bearer token[39m[90m                                                      [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\PermissionTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmin has dashboard access permission[39m[90m                                            [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can view users[39m[90m                                                             [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can manage users[39m[90m                                                           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin has all report permissions[39m[90m                                                 [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can send notifications[39m[90m                                                     [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can view stats[39m[90m                                                             [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can manage settings[39m[90m                                                        [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can upload files[39m[90m                                                           [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can comment[39m[90m                                                                [39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\RegisterTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can register with email[39m[90m                                                     [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mregister fails with invalid data[39m[90m                                                 [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90memail must be unique[39m[90m                                                             [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtelephone must be unique[39m[90m                                                         [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpassword must be confirmed[39m[90m                                                       [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UpdateProfileAdminTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmin can update user profile[39m[90m                                                    [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only nom[39m[90m                                                        [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only prenom[39m[90m                                                     [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update only telephone[39m[90m                                                  [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can add email[39m[90m                                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update email[39m[90m                                                           [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update user password[39m[90m                                                   [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin password requires confirmation[39m[90m                                             [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid email format admin[39m[90m                                                       [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate email validation admin[39m[90m                                                 [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid telephone format admin[39m[90m                                                   [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot update profile[39m[90m                                       [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot update profile[39m[90m                                    [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can null out telephone[39m[90m                                                     [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can null out email[39m[90m                                                         [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update all fields at once[39m[90m                                              [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UpdateProfileUserTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can update profile[39m[90m                                                          [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update only nom[39m[90m                                                         [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update only prenom[39m[90m                                                      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update only telephone[39m[90m                                                   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can add email[39m[90m                                                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update email[39m[90m                                                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update password[39m[90m                                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpassword requires confirmation[39m[90m                                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid email format[39m[90m                                                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate email validation[39m[90m                                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid telephone format[39m[90m                                                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnom max length validation[39m[90m                                                        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot update profile[39m[90m                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can null out telephone[39m[90m                                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can null out email[39m[90m                                                          [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\UserPermissionTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can create reports[39m[90m                                                          [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can view own reports[39m[90m                                                        [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can comment[39m[90m                                                                 [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can upload files[39m[90m                                                            [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot view any reports[39m[90m                                                     [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can update reports[39m[90m                                                          [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can delete reports[39m[90m                                                          [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot change status[39m[90m                                                        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot access dashboard[39m[90m                                                     [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot view stats[39m[90m                                                           [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot manage settings[39m[90m                                                      [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Cache\CategoryCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mcategories are cached for one hour[39m[90m                                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory cache uses one hour ttl[39m[90m                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory cache is invalidated on create[39m[90m                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory cache is invalidated on update[39m[90m                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory cache is invalidated on delete[39m[90m                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcache keys are properly formatted[39m[90m                                                [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Cache\ReportsCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mreports are cached for sixty seconds[39m[90m                                             [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports cache uses sixty seconds ttl[39m[90m                                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports cache is invalidated on create[39m[90m                                           [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports cache is invalidated on update[39m[90m                                           [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports cache is invalidated on delete[39m[90m                                           [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports cache ttl is shorter than categories[39m[90m                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdifferent cache keys do not interfere[39m[90m                                            [39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Cache\StatsCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mstatistics are cached for one hour[39m[90m                                               [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats cache uses one hour ttl[39m[90m                                                    [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats cache is invalidated on report create[39m[90m                                      [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats cache is invalidated on report delete[39m[90m                                      [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats cache is invalidated on status change[39m[90m                                      [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmultiple cache keys can coexist[39m[90m                                                  [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats cache key consistency[39m[90m                                                      [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mseparate stats for different entities[39m[90m                                            [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Categories\CreateCategoryTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmin can create category[39m[90m                                                        [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot create category[39m[90m                                                      [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot create category[39m[90m                                      [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory creation requires name[39m[90m                                                  [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory name must be unique[39m[90m                                                     [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Categories\GetCategoriesTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can get all categories[39m[90m                                                      [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can get all categories[39m[90m                                                     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot get categories[39m[90m                                       [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategories are paginated[39m[90m                                                         [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mget single category[39m[90m                                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mget nonexistent category returns 404[39m[90m                                             [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Comments\CreateCommentTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can create comment[39m[90m                                                          [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot create comment[39m[90m                                    [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot create comment[39m[90m                                       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcomment validation fails without content[39m[90m                                         [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcomment content must not be empty[39m[90m                                                [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcreate comment on nonexistent report returns 404[39m[90m                                 [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Comments\DeleteCommentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mcomment owner can delete comment[39m[90m                                                 [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can delete any comment[39m[90m                                                     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot delete other user comment[39m[90m                                            [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot delete comment[39m[90m                                       [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdelete nonexistent comment returns 404[39m[90m                                           [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Comments\GetCommentsTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can get report comments[39m[90m                                                     [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcomments are paginated[39m[90m                                                           [39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot get comments[39m[90m                                         [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mget comments for nonexistent report returns 404[39m[90m                                  [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ExampleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe application returns a successful response[39m[90m                                    [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Jobs\AggregateStatsJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mjob is dispatchable[39m[90m                                                              [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob calculates total reports[39m[90m                                                     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob calculates reports by status[39m[90m                                                 [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob calculates reports by category[39m[90m                                               [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob calculates total users[39m[90m                                                       [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob caches stats with ttl[39m[90m                                                        [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob completes successfully[39m[90m                                                       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob handles empty database[39m[90m                                                       [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob has timeout[39m[90m                                                                  [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob aggregates complete stats[39m[90m                                                    [39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Jobs\NotifyUserJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mjob is dispatchable[39m[90m                                                              [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob sends notification to user[39m[90m                                                   [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob completes successfully[39m[90m                                                       [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob handles missing user[39m[90m                                                         [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob can notify multiple users[39m[90m                                                    [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob has timeout[39m[90m                                                                  [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob stores notification data[39m[90m                                                     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob has retry configuration[39m[90m                                                      [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Jobs\ProcessReportImagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mjob is dispatchable[39m[90m                                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob processes images for report[39m[90m                                                  [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob completes successfully[39m[90m                                                       [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob handles missing report[39m[90m                                                       [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob processes multiple images[39m[90m                                                    [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob has timeout[39m[90m                                                                  [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mjob is queued on default[39m[90m                                                         [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Likes\CreateLikeTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can like report[39m[90m                                                             [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot like same report twice[39m[90m                                               [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot like report[39m[90m                                       [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot like report[39m[90m                                          [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlike nonexistent report returns 404[39m[90m                                              [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Likes\DeleteLikeTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can unlike report[39m[90m                                                           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot unlike nonexistent like[39m[90m                                              [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can delete any like[39m[90m                                                        [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot unlike report[39m[90m                                        [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90munlike nonexistent report returns 404[39m[90m                                            [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Likes\GetLikesTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can get report likes[39m[90m                                                        [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlikes are paginated[39m[90m                                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can check if they liked report[39m[90m                                              [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser can check if they did not like report[39m[90m                                       [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot get likes[39m[90m                                            [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mget likes for nonexistent report returns 404[39m[90m                                     [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Notifications\NotifyCommentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnotification sent when comment created[39m[90m                                           [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreport owner receives comment notification[39m[90m                                       [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnotification contains comment info[39m[90m                                               [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mother commenters receive notifications too[39m[90m                                       [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Notifications\NotifyReportCreatedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnotification sent when report created[39m[90m                                            [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin receives new report notification[39m[90m                                           [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnotification contains report info[39m[90m                                                [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90monly admins receive new report notifications[39m[90m                                     [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Notifications\NotifyStatusChangeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnotification sent when report status changed[39m[90m                                     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser receives status change notification[39m[90m                                         [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnotification contains status info[39m[90m                                                [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstatus change to resolved[39m[90m                                                        [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Phase4\Phase4ToggleLikeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mcomplete like unlike toggle flow[39m[90m                                                 [39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\ChangeStatusTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser cannot change report status[39m[90m                                                 [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can change report to in progress[39m[90m                                           [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can change report to resolved[39m[90m                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid status fails[39m[90m                                                             [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchange status nonexistent report returns 404[39m[90m                                     [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\CreateReportTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can create report[39m[90m                                                           [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot create report[39m[90m                                     [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot create report[39m[90m                                        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreport validation fails without required fields[39m[90m                                  [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreport title must not exceed 255 characters[39m[90m                                      [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\DeleteImageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mreport owner can delete image[39m[90m                                                    [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can delete any image[39m[90m                                                       [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot delete other user image[39m[90m                                              [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdelete nonexistent image returns 404[39m[90m                                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot delete image[39m[90m                                         [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\DeleteReportTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can delete own report[39m[90m                                                       [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot delete other user report[39m[90m                                             [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can delete any report[39m[90m                                                      [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot delete other user report[39m[90m                          [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdelete nonexistent report returns 404[39m[90m                                            [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\GetReportsTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can view only own reports[39m[90m                                                   [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can view all reports[39m[90m                                                       [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreport includes user and category relations[39m[90m                                      [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports are paginated[39m[90m                                                            [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot view reports[39m[90m                                         [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot view reports[39m[90m                                      [39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\UpdateReportTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can update own report[39m[90m                                                       [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser cannot update other user report[39m[90m                                             [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can update any report[39m[90m                                                      [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mupdate with invalid data fails[39m[90m                                                   [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mupdate nonexistent report returns 404[39m[90m                                            [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Reports\UploadImageTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser can upload image to report[39m[90m                                                  [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser without permission cannot upload image[39m[90m                                      [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mimage validation fails with invalid file[39m[90m                                         [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mimage upload fails without image file[39m[90m                                            [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user cannot upload image[39m[90m                                         [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mupload to nonexistent report returns 404[39m[90m                                         [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Stats\CategoryStatsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mcategory stats endpoint is accessible[39m[90m                                            [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory total reports[39m[90m                                                           [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory reports by status[39m[90m                                                       [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory total users reported[39m[90m                                                    [39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory average reports per user[39m[90m                                                [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnonexistent category returns 404[39m[90m                                                 [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats requires permission[39m[90m                                                        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user rejected[39m[90m                                                    [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcategory stats empty[39m[90m                                                             [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompare two categories[39m[90m                                                           [39m [90m0.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Stats\GlobalStatsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mglobal stats endpoint is accessible[39m[90m                                              [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtotal reports count[39m[90m                                                              [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports by status[39m[90m                                                                [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreports by category[39m[90m                                                              [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtotal users count[39m[90m                                                                [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90musers by role[39m[90m                                                                    [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90maverage reports per user[39m[90m                                                         [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats requires permission[39m[90m                                                        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user rejected[39m[90m                                                    [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstats with empty database[39m[90m                                                        [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Stats\TimelineStatsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mtimeline endpoint is accessible[39m[90m                                                  [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline with 7 days period[39m[90m                                                      [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline with 30 days period[39m[90m                                                     [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline returns all 7 days[39m[90m                                                      [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline requires admin permission[39m[90m                                               [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline requires authentication[39m[90m                                                 [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtimeline with invalid period defaults to 7 days[39m[90m                                  [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Stats\UserStatsTest[39m
+  [32;1m✓[39;22m[90m [39m[90muser stats endpoint is accessible[39m[90m                                                [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser total reports[39m[90m                                                               [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser reports by status[39m[90m                                                           [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser reports by category[39m[90m                                                         [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser sees only own stats[39m[90m                                                         [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90madmin can view user stats[39m[90m                                                        [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90munauthenticated user rejected[39m[90m                                                    [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90muser stats empty[39m[90m                                                                 [39m [90m0.13s[39m  
+
+  [90mTests:[39m    [32;1m236 passed[39;22m[90m (650 assertions)[39m
+  [90mDuration:[39m [39m37.79s[39m
+

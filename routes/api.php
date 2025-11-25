@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\NotificationController;
@@ -21,6 +22,11 @@ Route::prefix('auth')->group(function () {
         Route::get('/me', [AuthController::class, 'me'])->name('auth.me');
         Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     });
+});
+
+// Profile routes - User manages their own profile
+Route::middleware('auth:sanctum')->group(function () {
+    Route::patch('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
 });
 
 // Protected routes
