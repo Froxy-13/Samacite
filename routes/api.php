@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Notifications\FcmTokenController;
 use App\Http\Controllers\Reports\CommentController;
 use App\Http\Controllers\Reports\ImageController;
 use App\Http\Controllers\Reports\LikeController;
@@ -49,12 +50,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reports/{reportId}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    // Likes
+    // Likes (avec alias /like pour compatibilité mobile)
     Route::get('/reports/{reportId}/likes/check', [LikeController::class, 'check'])->name('likes.check');
     Route::get('/reports/{reportId}/likes', [LikeController::class, 'index'])->name('likes.index');
     Route::post('/reports/{reportId}/likes', [LikeController::class, 'store'])->name('likes.store');
+    Route::post('/reports/{reportId}/like', [LikeController::class, 'store'])->name('likes.store.alias'); // Alias
     Route::delete('/reports/{reportId}/likes', [LikeController::class, 'destroy'])->name('likes.destroy');
+    Route::delete('/reports/{reportId}/like', [LikeController::class, 'destroy'])->name('likes.destroy.alias'); // Alias
     Route::delete('/likes/{id}', [LikeController::class, 'destroyById'])->name('likes.destroyById');
+
+    // FCM Tokens
+    Route::post('/fcm-token', [FcmTokenController::class, 'store'])->name('fcm-token.store');
+    Route::delete('/fcm-token', [FcmTokenController::class, 'destroy'])->name('fcm-token.destroy');
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

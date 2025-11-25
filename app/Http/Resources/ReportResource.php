@@ -23,8 +23,11 @@ class ReportResource extends JsonResource
             'longitude' => $this->longitude,
             'user_id' => $this->user_id,
             'category_id' => $this->category_id,
+            'likes_count' => $this->likes_count,
+            'is_liked' => $this->is_liked,
             'user' => $this->whenLoaded('user'),
             'category' => $this->whenLoaded('category'),
+            'images' => ReportImageResource::collection($this->whenLoaded('images')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

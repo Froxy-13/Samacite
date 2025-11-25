@@ -9,7 +9,9 @@ use App\Models\Report;
 use App\Models\ReportImage;
 use App\Repositories\Contracts\ReportImageRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ImageController extends BaseController
 {
@@ -44,17 +46,39 @@ class ImageController extends BaseController
         }
 
         $validated = $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB max initial
         ]);
 
+        // Sauvegarder temporairement
         $path = $validated['image']->store('reports', 'public');
+        $fullPath = storage_path('app/public/' . $path);
+
+        try {
+            // Compression immédiate pour éviter le timeout
+            $img = Image::read($fullPath);
+            
+            // Redimensionner si trop grand (max 1920x1920)
+            if ($img->width() > 1920 || $img->height() > 1920) {
+                $img->scale(width: 1920, height: 1920);
+            }
+            
+            // Compresser à 85% de qualité
+            $img->save($fullPath, quality: 85);
+            
+        } catch (\Exception $e) {
+            // Si la compression échoue, on garde l'original
+            Log::warning('Image compression failed', [
+                'path' => $path,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         $image = $this->imageRepository->create([
             'report_id' => $reportId,
             'image_path' => $path,
         ]);
 
-        // Dispatch job to process the image (compression, resizing, etc.)
+        // Dispatch job to create thumbnails in background
         ProcessReportImages::dispatch($report);
 
         return $this->success(

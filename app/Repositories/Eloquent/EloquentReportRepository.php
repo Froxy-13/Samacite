@@ -19,8 +19,8 @@ class EloquentReportRepository implements ReportRepositoryInterface
     {
         $query = Report::query();
 
-        // Eager load relations to avoid N+1 (only user and category for now)
-        $query->with(['user', 'category']);
+        // Eager load relations to avoid N+1
+        $query->with(['user', 'category', 'images']);
 
         // Apply filters
         if (isset($filters['status'])) {
@@ -45,9 +45,9 @@ class EloquentReportRepository implements ReportRepositoryInterface
 
     public function findWithRelations(int $id, array $relations = [])
     {
-        // Default relations (only user and category for now)
+        // Default relations
         if (empty($relations)) {
-            $relations = ['user', 'category'];
+            $relations = ['user', 'category', 'images'];
         }
 
         return Report::with($relations)->find($id);
@@ -74,7 +74,7 @@ class EloquentReportRepository implements ReportRepositoryInterface
     public function findByUser(int $userId, int $perPage = 15)
     {
         return Report::where('user_id', $userId)
-            ->with(['user', 'category'])
+            ->with(['user', 'category', 'images'])
             ->paginate($perPage);
     }
 }

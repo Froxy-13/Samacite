@@ -30,6 +30,8 @@ class Report extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $appends = ['likes_count', 'is_liked'];
+
     protected $dispatchesEvents = [
         'created' => ReportCreated::class,
     ];
@@ -57,6 +59,28 @@ class Report extends Model
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    /**
+     * Accessor: Nombre total de likes
+     */
+    public function getLikesCountAttribute(): int
+    {
+        return $this->likes()->count();
+    }
+
+    /**
+     * Accessor: Si l'utilisateur connecté a liké ce signalement
+     */
+    public function getIsLikedAttribute(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+
+        return $this->likes()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 
     public function updateStatus($newStatus)
