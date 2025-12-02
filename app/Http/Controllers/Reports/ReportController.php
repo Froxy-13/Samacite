@@ -23,8 +23,19 @@ class ReportController extends BaseController
         // Check permission using policy
         $this->authorize('viewAny', Report::class);
 
-        // Get all available filters including optional user_id
-        $filters = $request->only(['status', 'category_id', 'search', 'user_id']);
+        // 🔥 FIX : Support des deux formats de filtres
+        // Mobile envoie : filter[status], filter[category_id]
+        // Admin peut envoyer : status, category_id (optionnel)
+        $filters = [
+            'status' => $request->input('filter.status') ?? $request->input('status'),
+            'category_id' => $request->input('filter.category_id') ?? $request->input('category_id'),
+            'search' => $request->input('search'),
+            'user_id' => $request->input('user_id'),
+        ];
+        
+        // Nettoyer les valeurs nulles/vides
+        $filters = array_filter($filters, fn($value) => !is_null($value) && $value !== '');
+        
         $perPage = $request->input('per_page', 15);
 
         // Use repository with filters (user_id is now optional)
