@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'telephone',
         'password',
+        'photo_url',
     ];
 
     /**
@@ -48,6 +49,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the full name attribute
+     */
+    public function getNameAttribute(): string
+    {
+        return trim($this->nom . ' ' . $this->prenom);
     }
 
     /**

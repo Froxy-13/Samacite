@@ -20,8 +20,8 @@ class ReportPolicy
      */
     public function view(User $user, Report $report): bool
     {
-        // User can view their own reports or admin can view any
-        return $user->id === $report->user_id || $user->hasRole('Admin');
+        // Any authenticated user can view any report details
+        return true;
     }
 
     /**

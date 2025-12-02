@@ -23,10 +23,16 @@ class GenericNotification extends Notification
 
     public function toDatabase(object $notifiable): array
     {
-        return [
-            'type' => 'generic',
-            'message' => $this->message,
-            'data' => $this->data,
-        ];
+        // If data contains a type, use it; otherwise default to 'generic'
+        $type = $this->data['type'] ?? 'generic';
+        
+        // Merge the message and data, ensuring type is at root level
+        return array_merge(
+            [
+                'type' => $type,
+                'message' => $this->message,
+            ],
+            $this->data
+        );
     }
 }

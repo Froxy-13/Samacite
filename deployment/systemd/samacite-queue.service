@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Script pour démarrer le queue worker de SamaCité
+# À placer dans /etc/systemd/system/samacite-queue.service
+
+[Unit]
+Description=SamaCité Queue Worker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/samacite
+ExecStart=/usr/bin/php /var/www/samacite/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+Restart=always
+RestartSec=10
+
+# Logs
+StandardOutput=append:/var/www/samacite/storage/logs/queue-worker.log
+StandardError=append:/var/www/samacite/storage/logs/queue-worker-error.log
+
+[Install]
+WantedBy=multi-user.target

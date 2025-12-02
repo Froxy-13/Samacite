@@ -70,6 +70,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Listeners\SendCommentNotification::class
         );
 
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Events\ReportLiked::class,
+            \App\Listeners\SendLikeNotification::class
+        );
+
         // Register model observers for cache invalidation
         \App\Models\Category::observe(\App\Observers\CategoryObserver::class);
         \App\Models\Report::observe(\App\Observers\ReportObserver::class);

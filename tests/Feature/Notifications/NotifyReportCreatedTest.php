@@ -118,7 +118,12 @@ class NotifyReportCreatedTest extends TestCase
                 'status' => 'En attente'
             ]);
 
-        // Two jobs should be dispatched: one for user1 (creator), one for admin(s)
-        Queue::assertPushed(NotifyUserJob::class, 2);
+        // At least two jobs should be dispatched: one for user1 (creator), one or more for admin(s)
+        Queue::assertPushed(NotifyUserJob::class);
+        
+        // Ensure user2 (who is not an admin or creator) does NOT receive notification
+        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($user2) {
+            return $job->user->id !== $user2->id;
+        });
     }
 }

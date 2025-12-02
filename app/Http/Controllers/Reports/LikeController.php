@@ -65,6 +65,9 @@ class LikeController extends BaseController
             'user_id' => $userId,
         ]);
 
+        // Dispatch event for notification
+        \App\Events\ReportLiked::dispatch($like);
+
         return $this->success(
             new LikeResource($like),
             'Signalement aimé avec succès',

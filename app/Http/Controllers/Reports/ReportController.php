@@ -20,19 +20,15 @@ class ReportController extends BaseController
 
     public function index(Request $request)
     {
-        $user = auth()->user();
-
         // Check permission using policy
         $this->authorize('viewAny', Report::class);
 
-        // Regular users see only their own reports
-        if (!$user->hasRole('Admin')) {
-            $reports = $this->reportRepository->findByUser($user->id);
-        } else {
-            // Admin can view all and filter
-            $filters = $request->only(['status', 'category_id', 'search']);
-            $reports = $this->reportRepository->paginateWithFilters(15, $filters);
-        }
+        // Get all available filters including optional user_id
+        $filters = $request->only(['status', 'category_id', 'search', 'user_id']);
+        $perPage = $request->input('per_page', 15);
+
+        // Use repository with filters (user_id is now optional)
+        $reports = $this->reportRepository->paginateWithFilters($perPage, $filters);
 
         return $this->success(
             ReportResource::collection($reports),
@@ -79,6 +75,9 @@ class ReportController extends BaseController
 
         $report = $this->reportRepository->create($validated);
         $report = $this->reportRepository->findWithRelations($report->id);
+
+        // Dispatch event for notification
+        \App\Events\ReportCreated::dispatch($report);
 
         return $this->success(
             new ReportResource($report),

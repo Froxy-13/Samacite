@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Report;
 use App\Repositories\Contracts\ReportRepositoryInterface;
 use App\Services\CacheService;
+use Illuminate\Support\Facades\Storage;
 
 class EloquentReportRepository implements ReportRepositoryInterface
 {
@@ -22,23 +23,29 @@ class EloquentReportRepository implements ReportRepositoryInterface
         // Eager load relations to avoid N+1
         $query->with(['user', 'category', 'images']);
 
-        // Apply filters
-        if (isset($filters['status'])) {
+        // Apply filters only if provided
+        if (isset($filters['status']) && !empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        if (isset($filters['category_id'])) {
+        if (isset($filters['category_id']) && !empty($filters['category_id'])) {
             $query->where('category_id', $filters['category_id']);
         }
 
-        if (isset($filters['user_id'])) {
+        // ✅ Filter by user_id ONLY if explicitly provided in request
+        if (isset($filters['user_id']) && !empty($filters['user_id'])) {
             $query->where('user_id', $filters['user_id']);
         }
 
-        if (isset($filters['search'])) {
-            $query->where('title', 'like', "%{$filters['search']}%")
+        if (isset($filters['search']) && !empty($filters['search'])) {
+            $query->where(function($q) use ($filters) {
+                $q->where('title', 'like', "%{$filters['search']}%")
                   ->orWhere('description', 'like', "%{$filters['search']}%");
+            });
         }
+
+        // Order by most recent first
+        $query->orderBy('created_at', 'desc');
 
         return $query->paginate($perPage);
     }
@@ -68,6 +75,13 @@ class EloquentReportRepository implements ReportRepositoryInterface
     public function delete(int $id): bool
     {
         $report = Report::findOrFail($id);
+        
+        // Delete physical image files before deleting the report
+        foreach ($report->images as $image) {
+            Storage::delete($image->image_path);
+        }
+        
+        // The database records will be cascade deleted automatically
         return $report->delete();
     }
 

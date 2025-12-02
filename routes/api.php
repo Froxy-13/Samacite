@@ -27,6 +27,14 @@ Route::prefix('auth')->group(function () {
 // Profile routes - User manages their own profile
 Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    
+    // New Profile endpoints (Phase 4)
+    Route::prefix('user')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile.show');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+        Route::post('/profile/photo', [ProfileController::class, 'uploadPhoto'])->name('user.profile.photo');
+        Route::put('/password', [ProfileController::class, 'changePassword'])->name('user.password.change');
+    });
 });
 
 // Protected routes
@@ -89,6 +97,51 @@ Route::middleware('auth:sanctum')->group(function () {
     // Dashboard
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    });
+
+    // Test routes (pour développement uniquement)
+    Route::prefix('test')->group(function () {
+        // Créer une notification de test
+        Route::post('/notification/{userId}', function ($userId) {
+            $user = \App\Models\User::findOrFail($userId);
+            
+            $types = [
+                [
+                    'title' => 'Signalement résolu',
+                    'body' => 'Votre signalement a été marqué comme résolu',
+                    'type' => 'report_status_changed',
+                    'report_id' => rand(1, 10),
+                    'status' => 'Résolu'
+                ],
+                [
+                    'title' => 'Nouveau commentaire',
+                    'body' => 'Quelqu\'un a commenté votre signalement',
+                    'type' => 'new_comment',
+                    'report_id' => rand(1, 10),
+                    'comment_id' => rand(1, 5)
+                ],
+                [
+                    'title' => 'Signalement approuvé',
+                    'body' => 'Votre signalement a été approuvé et publié',
+                    'type' => 'report_created',
+                    'report_id' => rand(1, 10)
+                ]
+            ];
+            
+            $notificationData = $types[array_rand($types)];
+            
+            $user->notifications()->create([
+                'id' => \Illuminate\Support\Str::uuid(),
+                'type' => 'App\\Notifications\\TestNotification',
+                'data' => $notificationData,
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification de test créée',
+                'data' => $notificationData
+            ]);
+        })->name('test.notification');
     });
 });
 

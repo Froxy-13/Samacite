@@ -51,7 +51,7 @@ class GetReportsTest extends TestCase
         ]);
     }
 
-    public function test_user_can_view_only_own_reports()
+    public function test_user_can_view_all_reports()
     {
         $response = $this->actingAs($this->user)->getJson('/api/reports');
 
@@ -63,9 +63,23 @@ class GetReportsTest extends TestCase
                     '*' => ['id', 'title', 'description', 'status', 'user_id'],
                 ],
             ])
+            ->assertJsonCount(2, 'data'); // ✅ Now sees all reports (both user and admin)
+
+        // Verify reports from different users are included
+        $reports = $response->json('data');
+        $userIds = array_column($reports, 'user_id');
+        $this->assertContains($this->user->id, $userIds);
+        $this->assertContains($this->admin->id, $userIds);
+    }
+
+    public function test_user_can_filter_by_user_id()
+    {
+        $response = $this->actingAs($this->user)->getJson('/api/reports?user_id=' . $this->user->id);
+
+        $response->assertStatus(200)
             ->assertJsonCount(1, 'data');
 
-        // Verify it's their own report
+        // Verify only this user's reports are returned
         $report = $response->json('data.0');
         $this->assertEquals($this->user->id, $report['user_id']);
     }
@@ -129,5 +143,58 @@ class GetReportsTest extends TestCase
 
         $response = $this->actingAs($user)->getJson('/api/reports');
         $response->assertStatus(403);
+    }
+
+    public function test_user_can_view_details_of_own_report()
+    {
+        $report = Report::where('user_id', $this->user->id)->first();
+        
+        $response = $this->actingAs($this->user)->getJson("/api/reports/{$report->id}");
+        
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => ['id', 'title', 'description', 'status', 'user_id'],
+            ])
+            ->assertJson([
+                'data' => [
+                    'id' => $report->id,
+                    'user_id' => $this->user->id,
+                ],
+            ]);
+    }
+
+    public function test_user_can_view_details_of_other_user_report()
+    {
+        // Get report created by admin
+        $adminReport = Report::where('user_id', $this->admin->id)->first();
+        
+        // Regular user should be able to view admin's report details
+        $response = $this->actingAs($this->user)->getJson("/api/reports/{$adminReport->id}");
+        
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => ['id', 'title', 'description', 'status', 'user_id'],
+            ])
+            ->assertJson([
+                'data' => [
+                    'id' => $adminReport->id,
+                    'user_id' => $this->admin->id,
+                ],
+            ]);
+    }
+
+    public function test_get_nonexistent_report_returns_404()
+    {
+        $response = $this->actingAs($this->user)->getJson('/api/reports/9999');
+        
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Signalement non trouvé',
+            ]);
     }
 }
