@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AIAnalysisController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Categories\CategoryController;
@@ -92,6 +93,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user/{userId}', [StatsController::class, 'user'])->name('stats.userById');
         Route::get('/category/{categoryId}', [StatsController::class, 'category'])->name('stats.category');
         Route::get('/timeline', [StatsController::class, 'timeline'])->name('stats.timeline');
+    });
+
+    // AI Analysis
+    Route::prefix('ai')->group(function () {
+        Route::post('/analyze-image', [AIAnalysisController::class, 'analyzeImage'])->name('ai.analyze-image');
     });
 
     // Dashboard
