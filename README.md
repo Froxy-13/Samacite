@@ -34,6 +34,40 @@ SamaCité est divisée en 3 modules:
 
 ---
 
+## 🔔 Système de Notifications
+
+Le système de notifications utilise des **jobs en queue** pour notifier :
+- L'utilisateur lors de la création de son signalement
+- Tous les admins lors de nouveaux signalements
+- Les utilisateurs lors de changements de statut
+- Les utilisateurs lors de nouveaux commentaires
+
+### Configuration
+
+**Développement** (actuel) :
+```env
+QUEUE_CONNECTION=sync
+```
+Les notifications sont envoyées immédiatement sans besoin de worker.
+
+**Production** :
+```env
+QUEUE_CONNECTION=database
+```
+Nécessite un worker actif. Voir **[DEPLOYMENT_QUEUES.md](DEPLOYMENT_QUEUES.md)** pour la configuration complète.
+
+### Tests
+
+```bash
+# Tester le système de notifications
+php test_notifications.php
+
+# Vérifier les notifications existantes
+php check_notifications.php
+```
+
+---
+
 ## 📚 Documentation
 
 ### 🎯 Documentation Principale
