@@ -77,8 +77,28 @@ Exemple de réponse:
                     ]
                 ],
                 'generationConfig' => [
-                    'temperature' => 0.4,
-                    'maxOutputTokens' => 1500, // Gemini 2.5 utilise ~500 tokens pour thoughts + ~500 pour la réponse
+                    'temperature' => 0.7,
+                    'maxOutputTokens' => 2048, // Augmenté pour éviter les erreurs MAX_TOKENS
+                    'topK' => 40,
+                    'topP' => 0.95,
+                ],
+                'safetySettings' => [
+                    [
+                        'category' => 'HARM_CATEGORY_HARASSMENT',
+                        'threshold' => 'BLOCK_NONE'
+                    ],
+                    [
+                        'category' => 'HARM_CATEGORY_HATE_SPEECH',
+                        'threshold' => 'BLOCK_NONE'
+                    ],
+                    [
+                        'category' => 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                        'threshold' => 'BLOCK_NONE'
+                    ],
+                    [
+                        'category' => 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                        'threshold' => 'BLOCK_NONE'
+                    ]
                 ]
             ]);
 
@@ -92,7 +112,35 @@ Exemple de réponse:
             // Logger la réponse brute pour debug
             Log::info('Gemini Raw Response: ' . json_encode($responseData));
 
-            // 5. Parser la réponse - Gérer les deux formats (Gemini 1.5 et 2.0+)
+            // 5. Vérifier finishReason avant de parser
+            $finishReason = $responseData['candidates'][0]['finishReason'] ?? null;
+            
+            switch ($finishReason) {
+                case 'STOP':
+                    // Réponse complète et normale - continuer
+                    break;
+                    
+                case 'MAX_TOKENS':
+                    Log::warning('Gemini MAX_TOKENS reached', ['data' => $responseData]);
+                    return $this->error('La réponse IA a été tronquée. Veuillez réessayer avec une image plus simple.', 500);
+                    
+                case 'SAFETY':
+                    Log::warning('Gemini SAFETY filter triggered', ['data' => $responseData]);
+                    return $this->error('L\'image a été bloquée par les filtres de sécurité.', 400);
+                    
+                case 'RECITATION':
+                    Log::warning('Gemini RECITATION detected', ['data' => $responseData]);
+                    return $this->error('Contenu protégé par des droits d\'auteur détecté.', 400);
+                    
+                default:
+                    Log::error('Unexpected finishReason', [
+                        'reason' => $finishReason,
+                        'data' => $responseData
+                    ]);
+                    return $this->error("Erreur IA inattendue (code: {$finishReason})", 500);
+            }
+
+            // 6. Parser la réponse - Gérer les différents formats (Gemini 1.5 et 2.0+)
             $resultText = null;
             
             // Format Gemini 1.5 : candidates[0].content.parts[0].text
@@ -113,20 +161,32 @@ Exemple de réponse:
                 return $this->error('Format de réponse invalide de l\'IA', 500);
             }
             
-            // Extraire le JSON de la réponse
+            // 7. Extraire le JSON de la réponse
             $resultText = trim($resultText);
-            $resultText = preg_replace('/^```json\s*|\s*```$/m', '', $resultText);
+            
+            // Extraire le JSON s'il est entouré de ```json```
+            if (preg_match('/```json\s*(.*?)\s*```/s', $resultText, $matches)) {
+                $resultText = $matches[1];
+            } else {
+                // Nettoyer les marqueurs markdown si présents
+                $resultText = preg_replace('/^```json\s*|\s*```$/m', '', $resultText);
+            }
             
             Log::info('Extracted text from Gemini: ' . $resultText);
             
             $aiResult = json_decode($resultText, true);
 
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error('JSON parsing error: ' . json_last_error_msg() . '. Text was: ' . $resultText);
+                return $this->error('Impossible de parser la réponse JSON de l\'IA', 500);
+            }
+
             if (!$aiResult || !isset($aiResult['title'])) {
-                Log::error('Invalid AI Response - Failed to parse JSON. Text was: ' . $resultText);
+                Log::error('Invalid AI Response - Missing required fields. Result was: ' . json_encode($aiResult));
                 return $this->error('Format de réponse invalide de l\'IA', 500);
             }
 
-            // 6. Mapper catégorie vers ID
+            // 8. Mapper catégorie vers ID
             $categoryMap = [
                 'nid_de_poule' => 1,
                 'ordures' => 2,
@@ -139,12 +199,16 @@ Exemple de réponse:
             $categoryName = strtolower($aiResult['category_name'] ?? 'autre');
             $categoryId = $categoryMap[$categoryName] ?? 6;
 
-            // 7. Retourner le résultat
+            // 9. Retourner le résultat
             return $this->success([
                 'title' => $aiResult['title'],
                 'description' => $aiResult['description'],
                 'category_id' => $categoryId,
                 'confidence' => $aiResult['confidence'] ?? 0.8,
+                'ai_metadata' => [
+                    'finish_reason' => $finishReason,
+                    'tokens_used' => $responseData['usageMetadata']['totalTokenCount'] ?? null,
+                ]
             ], 'Image analysée avec succès');
 
         } catch (\Exception $e) {

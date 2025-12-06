@@ -50,7 +50,8 @@ class AnalyzeImageTest extends TestCase
                                     ])
                                 ]
                             ]
-                        ]
+                        ],
+                        'finishReason' => 'STOP'
                     ]
                 ]
             ], 200)
@@ -152,7 +153,8 @@ class AnalyzeImageTest extends TestCase
                                     ])
                                 ]
                             ]
-                        ]
+                        ],
+                        'finishReason' => 'STOP'
                     ]
                 ]
             ], 200)
@@ -196,7 +198,8 @@ class AnalyzeImageTest extends TestCase
                                     ])
                                 ]
                             ]
-                        ]
+                        ],
+                        'finishReason' => 'STOP'
                     ]
                 ]
             ], 200)
@@ -249,7 +252,8 @@ class AnalyzeImageTest extends TestCase
                                     'text' => 'Invalid JSON response without proper structure'
                                 ]
                             ]
-                        ]
+                        ],
+                        'finishReason' => 'STOP'
                     ]
                 ]
             ], 200)
