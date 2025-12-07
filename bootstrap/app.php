@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -19,8 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);
 
-        // Stateful API configuration for Sanctum
-        $middleware->statefulApi();
+        // Désactiver statefulApi car nous utilisons Bearer tokens uniquement
+        // $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Handle validation exceptions for JSON requests
@@ -32,6 +32,17 @@ return Application::configure(basePath: dirname(__DIR__))
                     'errors' => $e->errors(),
                     'data' => null,
                 ], 422);
+            }
+        });
+
+        // Handle authentication exceptions for API
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated',
+                    'data' => null,
+                ], 401);
             }
         });
     })->create();
