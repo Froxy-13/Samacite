@@ -42,12 +42,14 @@ class LoginTest extends TestCase
                         'prenom',
                         'email',
                         'telephone',
+                        'roles',
                     ],
                     'token',
                 ],
             ]);
 
         $this->assertNotEmpty($response->json('data.token'));
+        $this->assertIsArray($response->json('data.user.roles'));
     }
 
     /**

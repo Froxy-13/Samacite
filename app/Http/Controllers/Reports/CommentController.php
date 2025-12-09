@@ -60,8 +60,8 @@ class CommentController extends BaseController
 
         $comment = $this->commentRepository->create($data);
 
-        // Dispatch event for notification
-        \App\Events\CommentCreated::dispatch($comment);
+        // Notification automatique via CommentObserver::created()
+        // Pas besoin de dispatch manuel
 
         return $this->success(
             new CommentResource($comment),

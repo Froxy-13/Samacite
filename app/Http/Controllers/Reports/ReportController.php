@@ -88,8 +88,8 @@ class ReportController extends BaseController
         $report = $this->reportRepository->create($validated);
         $report = $this->reportRepository->findWithRelations($report->id);
 
-        // Dispatch event for notification
-        \App\Events\ReportCreated::dispatch($report);
+        // Notification automatique via ReportObserver::created()
+        // Pas besoin de dispatch manuel
 
         return $this->success(
             new ReportResource($report),

@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\Notifications;
 
-use App\Jobs\NotifyUserJob;
 use App\Models\User;
 use App\Models\Report;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\Traits\WithRolesAndPermissions;
 
@@ -23,8 +21,6 @@ class NotifyLikeTest extends TestCase
 
     public function test_notification_sent_when_report_liked()
     {
-        Queue::fake();
-
         $user = User::factory()->create();
         $user->assignRole('Utilisateur');
 
@@ -41,21 +37,26 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
+        $beforeCount = $reportOwner->notifications()->count();
+
         $this->actingAs($user, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes")
             ->assertStatus(201);
 
-        // Check if NotifyUserJob was dispatched to report owner
-        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($reportOwner) {
-            return $job->user->id === $reportOwner->id &&
-                   str_contains($job->message, 'aimé');
-        });
+        // Check notification was created in database via Observer
+        $this->assertEquals($beforeCount + 1, $reportOwner->notifications()->count());
+        
+        // Skip report_created notification and get report_liked
+        $notification = $reportOwner->notifications()
+            ->orderBy('created_at', 'desc')
+            ->skip($beforeCount)
+            ->first();
+        $this->assertEquals('report_liked', $notification->data['type']);
+        $this->assertEquals($report->id, $notification->data['report_id']);
     }
 
     public function test_report_owner_receives_like_notification()
     {
-        Queue::fake();
-
         $user = User::factory()->create();
         $user->assignRole('Utilisateur');
 
@@ -72,18 +73,22 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
+        $beforeCount = $reportOwner->notifications()->count();
+
         $this->actingAs($user, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes");
 
-        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($reportOwner) {
-            return $job->user->id === $reportOwner->id;
-        });
+        // Check notification sent to report owner (skip report_created)
+        $notification = $reportOwner->notifications()
+            ->orderBy('created_at', 'desc')
+            ->skip($beforeCount)
+            ->first();
+        $this->assertNotNull($notification);
+        $this->assertEquals('report_liked', $notification->data['type']);
     }
 
     public function test_notification_contains_like_info()
     {
-        Queue::fake();
-
         $user = User::factory()->create();
         $user->assignRole('Utilisateur');
 
@@ -100,15 +105,20 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
+        $beforeCount = $reportOwner->notifications()->count();
+
         $this->actingAs($user, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes");
 
-        Queue::assertPushed(NotifyUserJob::class, function ($job) use ($reportOwner, $report) {
-            return $job->user->id === $reportOwner->id &&
-                   isset($job->data['report_id']) &&
-                   $job->data['report_id'] === $report->id &&
-                   $job->data['type'] === 'report_liked';
-        });
+        // Check notification data contains like info (skip report_created)
+        $notification = $reportOwner->notifications()
+            ->orderBy('created_at', 'desc')
+            ->skip($beforeCount)
+            ->first();
+        $this->assertNotNull($notification);
+        $this->assertEquals('report_liked', $notification->data['type']);
+        $this->assertEquals($report->id, $notification->data['report_id']);
+        $this->assertArrayHasKey('like_id', $notification->data);
     }
 
     public function test_no_notification_when_owner_likes_own_report()
@@ -126,13 +136,13 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
-        // Start faking queue AFTER report creation to avoid counting report creation notifications
-        Queue::fake();
+        // Count notifications before (should have report_created)
+        $beforeCount = $reportOwner->notifications()->count();
 
         $this->actingAs($reportOwner, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes");
 
-        // No notification should be sent when owner likes their own report
-        Queue::assertNotPushed(NotifyUserJob::class);
+        // No new notification should be added (self-notification prevention)
+        $this->assertEquals($beforeCount, $reportOwner->notifications()->count());
     }
 }

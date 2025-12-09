@@ -23,13 +23,18 @@ class StatsService
             return $stats;
         }
 
+        $totalReports = Report::count();
+        $reportsByStatus = $this->getReportsByStatus();
+        $resolvedCount = $reportsByStatus['Résolu']['count'] ?? 0;
+        
         $stats = [
-            'total_reports' => Report::count(),
-            'reports_by_status' => $this->getReportsByStatus(),
+            'total_reports' => $totalReports,
+            'reports_by_status' => $reportsByStatus,
             'reports_by_category' => $this->getReportsByCategory(),
             'total_users' => User::count(),
             'users_by_role' => $this->getUsersByRole(),
             'average_reports_per_user' => $this->getAverageReportsPerUser(),
+            'resolution_rate' => $totalReports > 0 ? round(($resolvedCount / $totalReports) * 100, 1) : 0,
         ];
 
         Cache::put($cacheKey, $stats, 3600);
