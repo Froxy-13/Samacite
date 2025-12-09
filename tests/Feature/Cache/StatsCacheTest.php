@@ -43,10 +43,10 @@ class StatsCacheTest extends TestCase
             'category_breakdown' => [$category->id => 5]
         ];
 
-        Cache::put('cache:stats:global_stats', $stats, 3600); // 1 hour
+        Cache::put('cache:stats:global', $stats, 3600); // 1 hour
 
         // Verify cache
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNotNull($cached);
         $this->assertEquals(5, $cached['total_reports']);
     }
@@ -59,9 +59,9 @@ class StatsCacheTest extends TestCase
             'pending' => 5
         ];
 
-        Cache::put('cache:stats:global_stats', $stats, 3600);
+        Cache::put('cache:stats:global', $stats, 3600);
 
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNotNull($cached);
         $this->assertCount(3, $cached);
     }
@@ -76,10 +76,10 @@ class StatsCacheTest extends TestCase
 
         // Cache stats
         $stats = ['total_reports' => 3];
-        Cache::put('cache:stats:global_stats', $stats, 3600);
+        Cache::put('cache:stats:global', $stats, 3600);
 
         // Verify cache
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNotNull($cached);
         $this->assertEquals(3, $cached['total_reports']);
 
@@ -87,7 +87,7 @@ class StatsCacheTest extends TestCase
         Report::factory()->create(['user_id' => $user->id, 'category_id' => $category->id]);
 
         // Cache should be flushed
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNull($cached, 'Stats cache should be invalidated after report creation');
     }
 
@@ -99,17 +99,17 @@ class StatsCacheTest extends TestCase
 
         // Cache stats
         $stats = ['total_reports' => 1];
-        Cache::put('cache:stats:global_stats', $stats, 3600);
+        Cache::put('cache:stats:global', $stats, 3600);
 
         // Verify cache
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNotNull($cached);
 
         // Delete report (should invalidate stats cache)
         $report->delete();
 
         // Cache should be flushed
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNull($cached, 'Stats cache should be invalidated after report deletion');
     }
 
@@ -125,29 +125,29 @@ class StatsCacheTest extends TestCase
 
         // Cache stats with status breakdown
         $stats = ['total_reports' => 1, 'status_breakdown' => ['En attente' => 1]];
-        Cache::put('cache:stats:global_stats', $stats, 3600);
+        Cache::put('cache:stats:global', $stats, 3600);
 
         // Verify cache
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNotNull($cached);
 
         // Change status (should invalidate stats cache)
         $report->updateStatus('Résolu');
 
         // Cache should be flushed
-        $cached = Cache::get('cache:stats:global_stats');
+        $cached = Cache::get('cache:stats:global');
         $this->assertNull($cached, 'Stats cache should be invalidated after status change');
     }
 
     public function test_multiple_cache_keys_can_coexist()
     {
         // Put data in different cache keys
-        Cache::put('cache:stats:global_stats', ['total' => 100], 3600);
+        Cache::put('cache:stats:global', ['total' => 100], 3600);
         Cache::put('cache:reports', ['report1'], 60);
         Cache::put('cache:categories', ['cat1'], 3600);
 
         // Verify all exist
-        $stats = Cache::get('cache:stats:global_stats');
+        $stats = Cache::get('cache:stats:global');
         $reports = Cache::get('cache:reports');
         $categories = Cache::get('cache:categories');
 

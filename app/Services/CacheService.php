@@ -116,7 +116,7 @@ class CacheService
      */
     public function invalidateStats(): void
     {
-        $this->forget('cache:stats:global_stats');
+        $this->forget('cache:stats:global');
     }
 
     /**

@@ -15,7 +15,7 @@ class StatsService
      */
     public function getGlobalStats(): array
     {
-        $cacheKey = 'stats:global';
+        $cacheKey = 'cache:stats:global';
         
         $stats = Cache::get($cacheKey);
         
@@ -41,7 +41,7 @@ class StatsService
      */
     public function getUserStats(User $user): array
     {
-        $cacheKey = "stats:user:{$user->id}";
+        $cacheKey = "cache:stats:user:{$user->id}";
         
         $stats = Cache::get($cacheKey);
         

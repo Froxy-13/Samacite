@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // Create categories
         $this->call(CategorySeeder::class);
 
-        // Create admin users
+        // Create admin users BEFORE reports
         $admins = [
             [
                 'nom' => 'Thiane',
@@ -55,5 +55,11 @@ class DatabaseSeeder extends Seeder
             );
             $admin->assignRole('Admin');
         }
+
+        // Create additional reports with different users
+        $this->call(AdditionalReportsSeeder::class);
+
+        // Create notifications
+        $this->call(NotificationSeeder::class);
     }
 }
