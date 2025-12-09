@@ -1,10 +1,13 @@
-# 🔧 FIX : Notifications ne fonctionnent pas sur mobile
+# 🔧 FIX : Notifications ne fonctionnent pas sur mobile et admin
 
-## ❌ Problème identifié
+## ❌ Problèmes identifiés
 
-Les notifications ne s'affichaient pas quand l'utilisateur créait un signalement via l'application mobile.
+1. **Mobile** : Les notifications ne s'affichaient pas quand l'utilisateur créait un signalement
+2. **Admin** : Les admins ne recevaient pas de notifications lors de la création de signalements
 
-## 🔍 Cause du problème
+## 🔍 Causes des problèmes
+
+### Problème 1 : Conflit entre deux systèmes
 
 Il y avait un **conflit entre deux systèmes de notification** :
 
@@ -26,7 +29,13 @@ Les **deux systèmes coexistaient** dans le code :
 - L'Observer essayait d'envoyer automatiquement la notification
 - Cela créait une **collision** et les notifications ne passaient pas
 
-## ✅ Solution appliquée
+### Problème 2 : Notifications admin manquantes
+
+Le `ReportObserver` envoyait seulement une notification au créateur du signalement, mais **pas aux administrateurs** qui doivent être alertés de chaque nouveau signalement.
+
+## ✅ Solutions appliquées
+
+### Solution 1 : Suppression des dispatches manuels
 
 **Suppression des dispatches manuels** dans les controllers car les **Observers gèrent déjà tout automatiquement** :
 
@@ -98,12 +107,102 @@ $like = $this->likeRepository->create([...]);
 return $this->success(...);
 ```
 
+---
+
+### Solution 2 : Ajout des notifications aux admins
+
+**Modification du ReportObserver** pour envoyer des notifications à TOUS les admins lors de la création d'un signalement :
+
+**AVANT** :
+```php
+public function created(Report $report): void
+{
+    $this->cacheService->invalidateReports();
+    $this->cacheService->invalidateStats();
+    
+    // 🔔 NOTIFICATION : Signalement créé
+    $report->user->notify(new GenericNotification(
+        'Votre signalement a été créé avec succès',
+        [
+            'type' => 'report_created',
+            'message' => 'Votre signalement a été créé avec succès',
+            'report_id' => $report->id,
+        ]
+    ));
+}
+```
+
+**APRÈS** :
+```php
+public function created(Report $report): void
+{
+    $this->cacheService->invalidateReports();
+    $this->cacheService->invalidateStats();
+    
+    // 🔔 NOTIFICATION 1 : Confirmation au créateur
+    $report->user->notify(new GenericNotification(
+        'Votre signalement a été créé avec succès',
+        [
+            'type' => 'report_created',
+            'message' => 'Votre signalement a été créé avec succès',
+            'report_id' => $report->id,
+        ]
+    ));
+
+    // 🔔 NOTIFICATION 2 : Alerte aux admins
+    $admins = User::role('Admin')->get();
+    foreach ($admins as $admin) {
+        $admin->notify(new GenericNotification(
+            'Un nouveau signalement a été créé',
+            [
+                'type' => 'report_created',
+                'message' => 'Un nouveau signalement a été créé',
+                'report_id' => $report->id,
+                'user_name' => $report->user->nom . ' ' . $report->user->prenom,
+                'report_title' => $report->title,
+            ]
+        ));
+    }
+}
+```
+
+### 3. LikeController.php (ligne ~69)
+
+**AVANT** :
+```php
+$like = $this->likeRepository->create([...]);
+
+// Dispatch event for notification
+\App\Events\ReportLiked::dispatch($like);  // ❌ SUPPRIMÉ
+
+return $this->success(...);
+```
+
+**APRÈS** :
+```php
+$like = $this->likeRepository->create([...]);
+
+// Notification automatique via LikeObserver::created()
+// Pas besoin de dispatch manuel
+
+return $this->success(...);
+```
+
 ## 🧪 Tests de validation
 
-Tous les tests passent **sans modification** :
+Tous les tests passent après modifications :
 
 ```bash
-✅ AutomaticNotificationsTest : 6/6 tests passent (15 assertions)
+✅ AutomaticNotificationsTest : 7/7 tests passent (19 assertions)
+   - test_notification_sent_when_report_created
+   - test_notification_sent_when_comment_added
+   - test_no_notification_when_owner_comments_own_report
+   - test_notification_sent_when_report_liked
+   - test_no_notification_when_owner_likes_own_report
+   - test_notification_sent_when_status_changes
+   - test_admins_receive_notification_when_report_created ✨ NOUVEAU
+
+✅ Tous les tests de notifications : 38/38 tests passent (85 assertions)
    - test_notification_sent_when_report_created
    - test_notification_sent_when_comment_added
    - test_no_notification_when_owner_comments_own_report
@@ -163,12 +262,18 @@ Tous les tests passent **sans modification** :
 
 ## ✅ Résultat final
 
-🎉 **Les notifications fonctionnent maintenant correctement sur mobile !**
+🎉 **Les notifications fonctionnent maintenant correctement sur mobile ET pour les admins !**
 
+### Pour les utilisateurs mobiles :
 Chaque fois qu'un utilisateur :
-- ✅ Crée un signalement → reçoit une notification
+- ✅ Crée un signalement → reçoit une notification de confirmation
 - ✅ Reçoit un commentaire → reçoit une notification  
 - ✅ Reçoit un like → reçoit une notification
 - ✅ Voit son signalement changer de statut → reçoit une notification
+
+### Pour les administrateurs :
+- ✅ **Reçoivent une notification à chaque nouveau signalement créé**
+- ✅ La notification contient : nom de l'utilisateur, titre du signalement, ID du rapport
+- ✅ Peuvent suivre en temps réel tous les signalements de la plateforme
 
 **Avec auto-prévention** : pas de notification si l'utilisateur interagit avec son propre contenu.

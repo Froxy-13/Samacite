@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Report;
+use App\Models\User;
 use App\Services\CacheService;
 use App\Notifications\GenericNotification;
 
@@ -23,7 +24,7 @@ class ReportObserver
         $this->cacheService->invalidateReports();
         $this->cacheService->invalidateStats();
         
-        // 🔔 NOTIFICATION : Signalement créé
+        // 🔔 NOTIFICATION 1 : Confirmation au créateur
         $report->user->notify(new GenericNotification(
             'Votre signalement a été créé avec succès',
             [
@@ -32,6 +33,21 @@ class ReportObserver
                 'report_id' => $report->id,
             ]
         ));
+
+        // 🔔 NOTIFICATION 2 : Alerte aux admins
+        $admins = User::role('Admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new GenericNotification(
+                'Un nouveau signalement a été créé',
+                [
+                    'type' => 'report_created',
+                    'message' => 'Un nouveau signalement a été créé',
+                    'report_id' => $report->id,
+                    'user_name' => $report->user->nom . ' ' . $report->user->prenom,
+                    'report_title' => $report->title,
+                ]
+            ));
+        }
     }
 
     /**
