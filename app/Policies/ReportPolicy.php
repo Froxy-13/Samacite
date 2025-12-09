@@ -58,4 +58,22 @@ class ReportPolicy
     {
         return $user->hasRole('Admin');
     }
+
+    /**
+     * Determine if the user can archive a report
+     * Only admins can archive reports
+     */
+    public function archive(User $user, Report $report): bool
+    {
+        return $user->hasRole('Admin');
+    }
+
+    /**
+     * Determine if the user can unarchive a report
+     * Only admins can unarchive reports
+     */
+    public function unarchive(User $user, Report $report): bool
+    {
+        return $user->hasRole('Admin');
+    }
 }

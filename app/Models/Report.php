@@ -21,6 +21,7 @@ class Report extends Model
         'latitude',
         'longitude',
         'status',
+        'archived_at',
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class Report extends Model
         'longitude' => 'decimal:8',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'archived_at' => 'datetime',
     ];
 
     protected $appends = ['likes_count', 'is_liked'];
@@ -90,6 +92,46 @@ class Report extends Model
         $this->save();
         
         event(new StatusChanged($this, $oldStatus, $newStatus));
+    }
+
+    /**
+     * Archive the report
+     */
+    public function archive(): void
+    {
+        $this->update(['archived_at' => now()]);
+    }
+
+    /**
+     * Unarchive the report
+     */
+    public function unarchive(): void
+    {
+        $this->update(['archived_at' => null]);
+    }
+
+    /**
+     * Check if report is archived
+     */
+    public function isArchived(): bool
+    {
+        return !is_null($this->archived_at);
+    }
+
+    /**
+     * Scope to get only archived reports
+     */
+    public function scopeArchived($query)
+    {
+        return $query->whereNotNull('archived_at');
+    }
+
+    /**
+     * Scope to get only non-archived reports
+     */
+    public function scopeNotArchived($query)
+    {
+        return $query->whereNull('archived_at');
     }
 }
 

@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Repositories\Eloquent\EloquentReportRepository;
 use App\Services\CacheService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ReportController extends BaseController
 {
@@ -164,6 +165,54 @@ class ReportController extends BaseController
         return $this->success(
             new ReportResource($report),
             'Statut du signalement mis à jour avec succès'
+        );
+    }
+
+    public function archive($id)
+    {
+        $report = Report::find($id);
+
+        if (!$report) {
+            return $this->notFound('Signalement non trouvé');
+        }
+
+        // Check authorization using policy - only admins can archive
+        $this->authorize('archive', $report);
+
+        $report->archive();
+        
+        // Invalidate cache
+        Cache::forget('cache:stats:global');
+        
+        $report = $this->reportRepository->findWithRelations($id);
+
+        return $this->success(
+            new ReportResource($report),
+            'Signalement archivé avec succès'
+        );
+    }
+
+    public function unarchive($id)
+    {
+        $report = Report::find($id);
+
+        if (!$report) {
+            return $this->notFound('Signalement non trouvé');
+        }
+
+        // Check authorization using policy - only admins can unarchive
+        $this->authorize('unarchive', $report);
+
+        $report->unarchive();
+        
+        // Invalidate cache
+        Cache::forget('cache:stats:global');
+        
+        $report = $this->reportRepository->findWithRelations($id);
+
+        return $this->success(
+            new ReportResource($report),
+            'Signalement désarchivé avec succès'
         );
     }
 }

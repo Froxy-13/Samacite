@@ -47,6 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/reports/{id}', [ReportController::class, 'update'])->name('reports.update');
     Route::delete('/reports/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
     Route::patch('/reports/{id}/status', [ReportController::class, 'changeStatus'])->name('reports.changeStatus');
+    Route::post('/reports/{id}/archive', [ReportController::class, 'archive'])->name('reports.archive');
+    Route::patch('/reports/{id}/archive', [ReportController::class, 'archive'])->name('reports.archive.patch');
+    Route::post('/reports/{id}/unarchive', [ReportController::class, 'unarchive'])->name('reports.unarchive');
+    Route::patch('/reports/{id}/unarchive', [ReportController::class, 'unarchive'])->name('reports.unarchive.patch');
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
