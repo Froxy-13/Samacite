@@ -65,8 +65,8 @@ class LikeController extends BaseController
             'user_id' => $userId,
         ]);
 
-        // Dispatch event for notification
-        \App\Events\ReportLiked::dispatch($like);
+        // Notification automatique via LikeObserver::created()
+        // Pas besoin de dispatch manuel
 
         return $this->success(
             new LikeResource($like),

@@ -43,8 +43,12 @@ class RegisterTest extends TestCase
                     'prenom',
                     'email',
                     'telephone',
+                    'roles',
                 ],
             ]);
+
+        $this->assertIsArray($response->json('data.roles'));
+        $this->assertContains('Utilisateur', $response->json('data.roles'));
 
         $this->assertDatabaseHas('users', [
             'email' => $email,

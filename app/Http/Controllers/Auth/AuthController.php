@@ -38,12 +38,16 @@ class AuthController extends BaseController
             // Role doesn't exist yet, just continue
         }
 
+        // Load roles for response
+        $user->load('roles');
+
         return $this->success([
             'id' => $user->id,
             'nom' => $user->nom,
             'prenom' => $user->prenom,
             'email' => $user->email,
             'telephone' => $user->telephone,
+            'roles' => $user->roles->pluck('name')->toArray(),
         ], 'Utilisateur enregistré avec succès', 201);
     }
 
@@ -82,6 +86,9 @@ class AuthController extends BaseController
         // Generate token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Load roles for response
+        $user->load('roles');
+
         return $this->success([
             'user' => [
                 'id' => $user->id,
@@ -89,6 +96,7 @@ class AuthController extends BaseController
                 'prenom' => $user->prenom,
                 'email' => $user->email,
                 'telephone' => $user->telephone,
+                'roles' => $user->roles->pluck('name')->toArray(),
             ],
             'token' => $token,
         ], 'Connecté avec succès');
