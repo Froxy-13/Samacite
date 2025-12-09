@@ -182,6 +182,13 @@ php artisan test tests/Feature/Notifications/
 - ✅ Dashboard Admin complet
 - ✅ Cache 1h TTL
 
+### 🔄 Archivage des Signalements
+- ✅ Archive/désarchive (soft delete)
+- ✅ Préservation des données
+- ✅ Endpoints: `POST/PATCH /api/reports/{id}/archive`
+- ✅ Authorization: Admin only
+- ✅ Cache auto-invalidation
+
 ---
 
 ## 🏗️ Architecture
@@ -232,10 +239,11 @@ php artisan pail                    # Voir les logs en temps réel
 
 ### Tests
 ```bash
-php artisan test                    # Tous les tests (198)
+php artisan test                    # Tous les tests (289)
 php artisan test --coverage         # Avec code coverage
 php artisan test tests/Feature/Auth/
 php artisan test tests/Feature/Notifications/
+php artisan test tests/Feature/Integration/
 ```
 
 ### Base de Données
@@ -369,7 +377,16 @@ GET    /api/stats/global         (Admin)
 GET    /api/stats/user           (protégé)
 GET    /api/stats/user/{id}      (Admin)
 GET    /api/stats/category/{id}  (Admin)
+GET    /api/stats/timeline       (Admin)
 GET    /api/dashboard            (Admin)
+```
+
+### Archivage
+```
+POST   /api/reports/{id}/archive    (Admin)
+PATCH  /api/reports/{id}/archive    (Admin)
+POST   /api/reports/{id}/unarchive  (Admin)
+PATCH  /api/reports/{id}/unarchive  (Admin)
 ```
 
 ---
@@ -449,7 +466,7 @@ php artisan optimize
 ```bash
 # ✅ Tous les tests passent
 php artisan test
-# OK (198 tests, 506 assertions)
+# OK (289 tests, 902 assertions)
 
 # ✅ Importer dans Postman
 # File: SamaCite.postman_collection.json
@@ -469,7 +486,7 @@ php artisan test
 
 ### Tests
 - Exécuter: `php artisan test`
-- 198 tests, 506 assertions, 100% passing
+- 289 tests, 902 assertions, 100% passing
 
 ### Postman Collection
 - Importer: `SamaCite.postman_collection.json`
@@ -499,13 +516,17 @@ Propriété de SamaCité - Tous droits réservés
 | 20 Nov 2025 | ✅ Phase 1-8 Complétées |
 | 23 Nov 2025 | ✅ Fix: Description optionnelle |
 | 23 Nov 2025 | ✅ Fix: Notifications (QUEUE_CONNECTION=sync) |
-| 23 Nov 2025 | ✅ Backend Production-Ready |
+| 23 Nov 2025 | ✅ Backend Production-Ready (198 tests) |
+| 09 Dec 2025 | ✅ Archive Functionality Implemented |
+| 09 Dec 2025 | ✅ Stats Cache Consistency Fixed |
+| 09 Dec 2025 | ✅ Mobile-to-Admin Flow Integrated |
+| 09 Dec 2025 | ✅ Backend Complete (289 tests, 100% passing) |
 | - | ⏳ Frontend React (En cours) |
 | - | ⏳ Mobile Flutter (En cours) |
 | - | ⏳ Production Deployment |
 
 ---
 
-**Version**: 2.0  
-**Backend Status**: ✅ **PRODUCTION-READY** (198/198 tests)  
-**Last Updated**: 23 November 2025
+**Version**: 2.1  
+**Backend Status**: ✅ **PRODUCTION-READY** (289/289 tests, 902 assertions)  
+**Last Updated**: 09 December 2025
