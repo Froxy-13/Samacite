@@ -73,16 +73,13 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
-        $beforeCount = $reportOwner->notifications()->count();
-
         $this->actingAs($user, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes");
 
-        // Check notification sent to report owner (skip report_created)
+        // Check notification sent to report owner (search for report_liked type)
         $notification = $reportOwner->notifications()
-            ->orderBy('created_at', 'desc')
-            ->skip($beforeCount)
-            ->first();
+            ->get()
+            ->firstWhere('data.type', 'report_liked');
         $this->assertNotNull($notification);
         $this->assertEquals('report_liked', $notification->data['type']);
     }
@@ -105,16 +102,13 @@ class NotifyLikeTest extends TestCase
             'status' => 'En attente',
         ]);
 
-        $beforeCount = $reportOwner->notifications()->count();
-
         $this->actingAs($user, 'sanctum')
             ->postJson("/api/reports/{$report->id}/likes");
 
-        // Check notification data contains like info (skip report_created)
+        // Check notification data contains like info (search for report_liked type)
         $notification = $reportOwner->notifications()
-            ->orderBy('created_at', 'desc')
-            ->skip($beforeCount)
-            ->first();
+            ->get()
+            ->firstWhere('data.type', 'report_liked');
         $this->assertNotNull($notification);
         $this->assertEquals('report_liked', $notification->data['type']);
         $this->assertEquals($report->id, $notification->data['report_id']);

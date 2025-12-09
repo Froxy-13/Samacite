@@ -213,4 +213,36 @@ class AutomaticNotificationsTest extends TestCase
         $this->assertEquals('en_attente', $data['old_status']);
         $this->assertEquals('en_cours', $data['new_status']);
     }
+
+    public function test_admins_receive_notification_when_report_created(): void
+    {
+        // Créer un admin
+        $admin = User::factory()->create(['nom' => 'Admin', 'prenom' => 'Alpha']);
+        $admin->assignRole('Admin');
+
+        $beforeCount = $admin->notifications()->count();
+
+        // Créer un signalement par user1
+        $report = Report::create([
+            'title' => 'Test Report for Admin',
+            'description' => 'Test Description',
+            'address' => 'Test Address',
+            'latitude' => 14.6928,
+            'longitude' => -17.4467,
+            'status' => 'en_attente',
+            'category_id' => $this->category->id,
+            'user_id' => $this->user1->id,
+        ]);
+
+        // Vérifier que l'admin a reçu une notification
+        $afterCount = $admin->fresh()->notifications()->count();
+        $this->assertGreaterThan($beforeCount, $afterCount);
+
+        // Vérifier le contenu de la notification
+        $notification = $admin->fresh()->notifications()->orderBy('created_at', 'desc')->first();
+        $data = $notification->data;
+        $this->assertEquals('report_created', $data['type']);
+        $this->assertEquals($report->id, $data['report_id']);
+        $this->assertStringContainsString('nouveau signalement', $data['message']);
+    }
 }
