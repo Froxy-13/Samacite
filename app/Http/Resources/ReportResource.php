@@ -25,6 +25,7 @@ class ReportResource extends JsonResource
             'category_id' => $this->category_id,
             'likes_count' => $this->likes_count,
             'is_liked' => $this->is_liked,
+            'comments_count' => $this->comments_count ?? $this->comments()->count(),
             'user' => $this->whenLoaded('user'),
             'category' => $this->whenLoaded('category'),
             'images' => ReportImageResource::collection($this->whenLoaded('images')),
