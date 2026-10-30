@@ -134,7 +134,7 @@ class StatsService
     private function getReportsByCategory(): array
     {
         $categories = Category::withCount('reports')
-            ->where('reports_count', '>', 0)
+            ->has('reports')
             ->get(['id', 'name', 'reports_count']);
         
         $totalReports = Report::count();
